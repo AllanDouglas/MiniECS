@@ -6,6 +6,7 @@ namespace MiniECS
     public sealed class LevelController : MiniECSBehaviour
     {
         [SerializeReference, ReferencePicker] private IGameMode _gameMode;
+        [SerializeField] private bool _enabled;
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
 
@@ -21,6 +22,7 @@ namespace MiniECS
                 GameLoopController.Instance.RegisterEntityController(_entities[i]);
             }
 
+            GameLoopController.Instance.enabled = _enabled;
         }
 
         void OnValidate()
@@ -58,7 +60,7 @@ namespace MiniECS
 
             public void Init(int entityBufferSize, int componentsBufferSize)
             {
-                game = new(entityBufferSize, componentsBufferSize);
+                game = new(entityBufferSize, componentsBufferSize, EventBus);
             }
 
             void Start()

@@ -117,6 +117,8 @@ namespace MiniECS
             Count--;
         }
 
+        public void Remove(in Entity entity) => Remove(entity.id);
+
         private struct EmptyComponent : IComponent { }
 
     }

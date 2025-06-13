@@ -12,5 +12,16 @@ namespace MiniECS
             ComponentsManager = new(componentsBufferSize);
             EventBus = eventBus ?? new();
         }
+
+        public void AddEntityPrototype(EntityController entityController)
+        {
+            Entity entity = EntityManager.AddEntityController(entityController);
+            ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
+        }
+
+        public void RemoveComponent<TComponent>(in Entity entity) where TComponent : struct, IComponent
+        {
+            ComponentsManager.RemoveComponent<TComponent>(in entity);
+        }
     }
 }

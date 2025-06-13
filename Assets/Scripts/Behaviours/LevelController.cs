@@ -53,8 +53,7 @@ namespace MiniECS
             {
                 if (gameMode != null)
                 {
-                    Entity entity = game.EntityManager.AddEntityController(entityController);
-                    game.ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
+                    game.AddEntityPrototype(entityController);
                 }
             }
 

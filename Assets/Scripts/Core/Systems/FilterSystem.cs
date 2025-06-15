@@ -1,5 +1,3 @@
-using System;
-
 namespace MiniECS
 {
 
@@ -7,23 +5,17 @@ namespace MiniECS
     {
         public delegate void FilterSystemAction(FilterContext context, ref TComponent component);
 
-        private readonly FilterSystemAction _action;
 
-        public FilterSystem(FilterSystemAction action)
+        public void Execute(Game game, float deltaTime, FilterSystemAction action)
         {
-            _action = action;
-        }
-
-        public void Execute(Game game, float deltaTime)
-        {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndex.Length; i++)
+            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                var entityIndex = game.EntityManager.ActiveEntitiesIndex[i];
+                var entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
                 Entity entity = game.EntityManager.Entities[entityIndex];
                 ref TComponent component = ref game.ComponentsManager.TryGet<TComponent>(in entity, out bool hasComponent);
                 if (hasComponent)
                 {
-                    _action.Invoke(new(game, entity, deltaTime), ref component);
+                    action.Invoke(new(game, entity, deltaTime), ref component);
                 }
             }
         }
@@ -34,19 +26,11 @@ namespace MiniECS
         where TComponent2 : struct, IComponent
     {
         public delegate void FilterSystemAction(FilterContext context, ref TComponent1 component1, ref TComponent2 component2);
-
-        private readonly FilterSystemAction _action;
-
-        public FilterSystem(FilterSystemAction action)
-        {
-            _action = action;
-        }
-
         public void Execute(Game game, float deltaTime, FilterSystemAction action)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndex.Length; i++)
+            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                var entityIndex = game.EntityManager.ActiveEntitiesIndex[i];
+                var entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
                 Entity entity = game.EntityManager.Entities[entityIndex];
                 ref TComponent1 component1 = ref game.ComponentsManager.TryGet<TComponent1>(in entity, out bool hasComponent1);
                 ref TComponent2 component2 = ref game.ComponentsManager.TryGet<TComponent2>(in entity, out bool hasComponent2);
@@ -74,9 +58,9 @@ namespace MiniECS
 
         public void Execute(Game game, float deltaTime, FilterSystemAction action)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndex.Length; i++)
+            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                var entityIndex = game.EntityManager.ActiveEntitiesIndex[i];
+                var entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
                 Entity entity = game.EntityManager.Entities[entityIndex];
                 ref TComponent1 component1 = ref game.ComponentsManager.TryGet<TComponent1>(in entity, out bool hasComponent1);
                 ref TComponent2 component2 = ref game.ComponentsManager.TryGet<TComponent2>(in entity, out bool hasComponent2);

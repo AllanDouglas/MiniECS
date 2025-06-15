@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 
 namespace MiniECS
 {
@@ -23,7 +22,7 @@ namespace MiniECS
 
         public int EntityCount { get => _entityCount; private set => _entityCount = value; }
         public ReadOnlySpan<Entity> Entities => new(_entities);
-        public ReadOnlySpan<int> ActiveEntitiesIndex => new(_activeEntities);
+        public ReadOnlySpan<int> ActiveEntitiesIndies => new(_activeEntities);
         public ReadOnlySpan<EntityController> EntityControllers => new(_entityControllers);
         public EntityAllocator EntityAllocator => _entityAllocator;
 

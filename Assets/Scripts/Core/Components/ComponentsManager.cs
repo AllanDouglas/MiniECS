@@ -1,20 +1,23 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MiniECS
 {
     public sealed class ComponentsManager
     {
-        private int _componentID;
+        private int _componentID = 0;
         private readonly Dictionary<Type, (int id, IComponentPool pool)> _componentCache;
         private readonly IComponentPool[] _componentsPool;
         private readonly int _sizeBuffer;
+        private readonly int _componentsPoolSize;
 
-        public ComponentsManager(int sizeBuffer)
+        public ComponentsManager(int componentsBufferSize, int componentsPoolSize)
         {
-            _componentCache = new(sizeBuffer);
-            _sizeBuffer = sizeBuffer;
-            _componentsPool = new IComponentPool[sizeBuffer];
+            _componentCache = new(componentsBufferSize);
+            _sizeBuffer = componentsBufferSize;
+            _componentsPoolSize = componentsBufferSize;
+            _componentsPool = new IComponentPool[componentsPoolSize];
         }
 
         public ComponentArchetype AddComponentPrototype(in Entity entity, IComponentPrototype[] componentPrototypes)
@@ -23,7 +26,7 @@ namespace MiniECS
 
             for (int i = 0; i < componentPrototypes.Length; i++)
             {
-                int componentID = componentPrototypes[i].AddToComponentPool(this, _sizeBuffer);
+                ComponentID componentID = componentPrototypes[i].AddToComponentPool(this, _componentsPoolSize);
                 componentPrototypes[i].AddComponentToEntity(entity, this);
                 componentArchetype += componentID;
             }
@@ -36,31 +39,32 @@ namespace MiniECS
         {
             if (!TryGetComponentPool(typeof(TComponent), out var componentPool))
             {
-                componentPool = new ComponentPool<TComponent>(_sizeBuffer);
+                componentPool = new ComponentPool<TComponent>(_componentsPoolSize);
                 Add(componentPool);
             }
 
             componentPool.Add(in entity, component);
         }
 
-        public void RemoveComponent<TComponent>(in Entity entity)
+        public ComponentID RemoveComponent<TComponent>(in Entity entity)
             where TComponent : struct, IComponent
         {
             if (TryGetComponentPool(typeof(TComponent), out var componentPool))
             {
                 componentPool.Remove(in entity);
+                return GetComponentID<TComponent>();
             }
-
+            return new(-1);
         }
 
-        public int GetComponentID<TComponent>() where TComponent : struct, IComponent
+        public ComponentID GetComponentID<TComponent>() where TComponent : struct, IComponent
         {
             if (_componentCache.TryGetValue(typeof(TComponent), out var poolSet))
             {
-                return poolSet.id;
+                return new(poolSet.id);
             }
 
-            return -1;
+            return new(-1);
         }
 
         public int Add(IComponentPool componentPool)
@@ -77,6 +81,19 @@ namespace MiniECS
             return _componentCache[typeof(TComponent)].pool;
         }
 
+        public IComponentPool GetComponentPool(ComponentID componentId)
+        {
+#if UNITY_EDITOR
+            if (componentId.value < 0 || componentId.value >= _componentsPool.Length)
+            {
+                UnityEngine.Debug.LogError($"Trying to get a Component Pool out of range. {componentId}");
+                return null;
+            }
+#endif
+
+            return _componentsPool[componentId.value];
+        }
+
         public bool TryGetComponentPool<TComponent>(out IComponentPool componentPool)
             where TComponent : struct, IComponent
         {
@@ -88,6 +105,7 @@ namespace MiniECS
         {
             return ref _componentCache[typeof(TComponent)].pool.TryGet<TComponent>(entity, out hasComponent);
         }
+        
 
         private bool TryGetComponentPool(Type componentType, out IComponentPool componentPool)
         {

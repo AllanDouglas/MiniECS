@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 namespace MiniECS
@@ -9,13 +8,14 @@ namespace MiniECS
         [SerializeField] private bool _enabled;
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
+        [SerializeField] private int _componentPoolSize = 100;
 
         [SerializeField, HideInInspector] private EntityController[] _entities;
 
         void Awake()
         {
             GameLoopController.Instance.gameMode = _gameMode;
-            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
+            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize, _componentPoolSize);
 
             for (int i = 0; i < _entities.Length; i++)
             {
@@ -47,7 +47,7 @@ namespace MiniECS
                 }
             }
             public Game game;
-            public IGameMode gameMode = new SilentMode();
+            public IGameMode gameMode;
 
             public void RegisterEntityController(EntityController entityController)
             {
@@ -57,9 +57,19 @@ namespace MiniECS
                 }
             }
 
-            public void Init(int entityBufferSize, int componentsBufferSize)
+            public void Init(int entityBufferSize, int componentsBufferSize, int componentPoolSize)
             {
-                game = new(entityBufferSize, componentsBufferSize, EventBus);
+                game = new(entityBufferSize, componentsBufferSize, componentPoolSize, EventBus);
+            }
+
+            void OnEnable()
+            {
+                gameMode?.OnEnable(game);
+            }
+
+            void OnDisable()
+            {
+                gameMode?.OnDisable(game);
             }
 
             void Start()
@@ -80,15 +90,9 @@ namespace MiniECS
             void LateUpdate()
             {
                 gameMode.LateUpdate(game);
+                EventBus.FlushAll();
             }
 
-            public class SilentMode : IGameMode
-            {
-                public void FixedUpdate(Game game) { }
-                public void LateUpdate(Game game) { }
-                public void Start(Game game) { }
-                public void Update(Game game) { }
-            }
 
         }
     }

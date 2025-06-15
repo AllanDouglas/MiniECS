@@ -287,8 +287,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameMode:
     rid: 3882763724093391021
+  _enabled: 0
   _entityBufferSize: 100
   _componentBufferSize: 10
+  _componentPoolSize: 100
   _entities:
   - {fileID: 1202935995}
   - {fileID: 1499875414}
@@ -688,7 +690,7 @@ MonoBehaviour:
       type: {class: TransformComponentPrototype, ns: MiniECS, asm: MiniECS}
       data:
         _component:
-          position: {x: 0, y: 0, z: 0}
+          position: {x: 0, y: 0, z: 10}
           rotation: {x: 0, y: 0, z: 0}
           scale: {x: 0, y: 0, z: 0}
 --- !u!4 &1202935996

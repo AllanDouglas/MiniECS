@@ -17,7 +17,7 @@ namespace MiniECS
 
         public ref T GetComponent<T>() => ref UnsafeUtility.As<TComponent, T>(ref _component);
 
-        public int AddToComponentPool(ComponentsManager componentsPool, int capacity = 4)
+        public ComponentID AddToComponentPool(ComponentsManager componentsPool, int capacity = 4)
         {
             if (!componentsPool.TryGetComponentPool<TComponent>(out _))
             {

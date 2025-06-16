@@ -3,14 +3,14 @@ namespace MiniECS
     public sealed class Game
     {
         public readonly EntityManager EntityManager;
-        public readonly EventBus EventBus;
+        public readonly SignalBus EventBus;
         public readonly ComponentsManager ComponentsManager;
         public readonly ArchetypeManager ArchetypeManager;
 
         public Game(int entityBufferSize = 100,
                     int componentsBufferSize = 100,
                     int componentsPoolSize = 100,
-                    EventBus eventBus = null)
+                    SignalBus eventBus = null)
         {
             EntityManager = new(entityBufferSize);
             ArchetypeManager = new(entityBufferSize);

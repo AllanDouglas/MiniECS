@@ -4,11 +4,11 @@ namespace MiniECS
 {
     public abstract class MiniECSBehaviour : MonoBehaviour
     {
-        private readonly static SignalBus _eventBus = new();
-        private readonly static MessageBroker _messageBroker = new();
+        private readonly static EventBus _eventBus = new();
+        private readonly static MessageBus _messageBus = new();
 
-        public SignalBus EventBus => _eventBus;
-        public MessageBus MessageBus => MessageBus;
+        public EventBus EventBus => _eventBus;
+        public MessageBus MessageBus => _messageBus;
 
     }
 }

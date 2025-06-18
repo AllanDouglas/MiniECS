@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MiniECS
 {
 
-    public sealed class SignalBus
+    public sealed class EventBus
     {
         private interface IFlushable
         {
@@ -13,19 +13,19 @@ namespace MiniECS
 
         private readonly List<IFlushable> _flushers = new();
 
-        public void Subscribe<T>(Action<T> callback) where T : struct, ISignal
+        public void Subscribe<T>(Action<T> callback) where T : struct, IEvent
         {
-            SignalStorage<T>.GetInstance(_flushers).Subscribe(callback);
+            EventStorage<T>.GetInstance(_flushers).Subscribe(callback);
         }
 
-        public void Unsubscribe<T>(Action<T> callback) where T : struct, ISignal
+        public void Unsubscribe<T>(Action<T> callback) where T : struct, IEvent
         {
-            SignalStorage<T>.GetInstance(_flushers).Unsubscribe(callback);
+            EventStorage<T>.GetInstance(_flushers).Unsubscribe(callback);
         }
 
-        public void Dispatch<T>(T evt) where T : struct, ISignal
+        public void Dispatch<T>(T evt) where T : struct, IEvent
         {
-            SignalStorage<T>.GetInstance(_flushers).Dispatch(evt);
+            EventStorage<T>.GetInstance(_flushers).Dispatch(evt);
         }
 
         public void FlushAll()
@@ -36,13 +36,13 @@ namespace MiniECS
             }
         }
 
-        private sealed class SignalStorage<T> : IFlushable where T : struct, ISignal
+        private sealed class EventStorage<T> : IFlushable where T : struct, IEvent
         {
             public List<T> queue = new();
             public Action<T> listeners;
 
-            private static SignalStorage<T> _instance;
-            public static SignalStorage<T> GetInstance(List<IFlushable> flushables)
+            private static EventStorage<T> _instance;
+            public static EventStorage<T> GetInstance(List<IFlushable> flushables)
             {
                 if (_instance is null)
                 {

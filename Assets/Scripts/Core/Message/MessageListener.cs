@@ -11,7 +11,7 @@ namespace MiniECS
         private GameObject _target;
 #endif
 
-        [SerializeField, DebugButton("Dispatch")] public TUnityEvent _onPerform;
+        [SerializeField, DebugButtonAttribute("Dispatch")] public TUnityEvent _onPerform;
 
         public void Enable(GameObject gameObject, MessageBus bus)
         {

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace MiniECS
 {
-    [CustomPropertyDrawer(typeof(DebugButton))]
+    [CustomPropertyDrawer(typeof(DebugButtonAttribute))]
     public class MessageListenerDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
@@ -23,7 +23,7 @@ namespace MiniECS
             var fieldInfo = parentObject.managedReferenceValue.GetType().GetField(property.name, System.Reflection.BindingFlags.Instance |
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
 
-            var debugButtonAttribute = fieldInfo.GetCustomAttributes(typeof(DebugButton), false).FirstOrDefault() as DebugButton;
+            var debugButtonAttribute = fieldInfo.GetCustomAttributes(typeof(DebugButtonAttribute), false).FirstOrDefault() as DebugButtonAttribute;
 
             var listener = parentObject.managedReferenceValue as IMessageListener;
 

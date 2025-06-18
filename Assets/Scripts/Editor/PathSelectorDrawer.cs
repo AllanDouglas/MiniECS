@@ -1,4 +1,4 @@
-﻿using MiniECS.Framework;
+﻿using MiniECS;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;

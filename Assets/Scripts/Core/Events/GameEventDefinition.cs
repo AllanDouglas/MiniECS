@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MiniECS.Framework
+namespace MiniECS
 {
     [Serializable]
     public struct GameEventDefinition 

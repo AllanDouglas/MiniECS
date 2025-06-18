@@ -6,8 +6,8 @@ using UnityEditor.UIElements;
 namespace MiniECS.Editor
 {
 
-    [CustomEditor(typeof(GameEventSettingsSO))]
-    public class GenericEventsSettingsEditor : UnityEditor.Editor
+    [CustomEditor(typeof(MessageSettingsSO))]
+    public class MessageSettingsEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {
@@ -26,22 +26,22 @@ namespace MiniECS.Editor
             }
 
             // Find all relative children of _events propertyField and register a FocusOutEvent
-            var eventsProperty = serializedObject.FindProperty("_events");
+            var eventsProperty = serializedObject.FindProperty("_messages");
             if (eventsProperty != null)
             {
                 foreach (var child in root.Children())
                 {
                     child.RegisterCallback<FocusOutEvent>(evt =>
                     {
-                        (target as GameEventSettingsSO).Generate();
+                        (target as MessageSettingsSO).Generate();
                     });
 
-                    if (child.name == "_events")
+                    if (child.name == "_messages")
                     {
                         var property = child as PropertyField;
                         property.RegisterValueChangeCallback(e =>
                         {
-                            (target as GameEventSettingsSO).Generate();
+                            (target as MessageSettingsSO).Generate();
                         });
                     }
                 }

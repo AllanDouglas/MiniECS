@@ -11,17 +11,17 @@ using UnityEditor.Compilation;
 namespace MiniECS
 {
 
-    [CreateAssetMenu(menuName = "ClapClap/Events/Data/GenericEventSettings")]
-    public sealed class GameEventSettingsSO : ScriptableObject
+    [CreateAssetMenu(menuName = "ClapClap/Events/Data/MessageSettings")]
+    public sealed class MessageSettingsSO : ScriptableObject
     {
         [SerializeField, PathSelector] private string _output = "Assets/_Game/Scripts/Generated";
-        [SerializeField, PathSelector] private string _namespace = "ClapClap.Game";
-        [SerializeField] private GameEventDefinition[] _events;
+        [SerializeField, PathSelector] private string _namespace = "Game";
+        [SerializeField] private int _incrementalEventId = 1;
+        [SerializeField] private MessageDefinition[] _messages;
 
         [SerializeField, HideInInspector] private int _eventsHash;
-        [SerializeField, HideInInspector] private int _incrementalEventId = 1;
 
-        public GameEventDefinition[] Events { get => _events; set => _events = value; }
+        public MessageDefinition[] Messages { get => _messages; set => _messages = value; }
 #if UNITY_EDITOR
         public void Generate()
         {
@@ -32,7 +32,7 @@ namespace MiniECS
             }
 
             var sb = new StringBuilder();
-            foreach (var evt in _events)
+            foreach (var evt in _messages)
             {
                 sb.Append(evt.Name);
             }
@@ -44,7 +44,7 @@ namespace MiniECS
                 _eventsHash = currentEventHash;
                 string filePath = Path.Combine(_output, "GameEvents.g.cs");
 
-                string classContent = GenerateClassContent(_events);
+                string classContent = GenerateClassContent(_messages);
                 try
                 {
                     string directory = Path.GetDirectoryName(filePath);
@@ -83,9 +83,9 @@ namespace MiniECS
 
         private void OnValidate()
         {
-            for (int i = 0; i < _events.Length; i++)
+            for (int i = 0; i < _messages.Length; i++)
             {
-                ref GameEventDefinition item = ref _events[i];
+                ref MessageDefinition item = ref _messages[i];
                 if (item.Id == 0)
                 {
                     item.Id = _incrementalEventId;
@@ -94,43 +94,48 @@ namespace MiniECS
             }
         }
 
-        private string GenerateClassContent(GameEventDefinition[] eventDefinitions)
+        private string GenerateClassContent(MessageDefinition[] eventDefinitions)
         {
 
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
-            var hasSet = new HashSet<GameEventDefinition>(eventDefinitions);
+            var hasSet = new HashSet<MessageDefinition>(eventDefinitions);
 
             var eventsString = new StringBuilder();
 
-            foreach (GameEventDefinition eventDefinition in hasSet)
+            foreach (MessageDefinition eventDefinition in hasSet)
             {
 
                 string eventName = ToPascalCase(eventDefinition.Name, textInfo);
                 var eventStructName = $"{eventName}Event";
+                var unityEventStructName = $"{eventName}UnityEvent";
+                var eventListenerName = $"{eventName}Listener";
 
                 var evt = $@"
-                [Serializable]
-                public partial struct {eventStructName}: IGameEvent, IEquatable<{eventStructName}>, IEquatable<IGameEvent>
-                {{
+    [Serializable]
+    public partial struct {eventStructName}: IMessage
+    {{
+        public readonly int Id => {eventDefinition.Id};
+    }}
 
-                    public readonly int Id => {eventDefinition.Id};
-                    public readonly string Name => ""{eventDefinition.Name}"";
+    [Serializable]
+    public sealed class {unityEventStructName} : UnityEvent<{eventStructName}> {{}}
 
-                    public bool Equals({eventStructName} other) => other.Id == Id;
-                    public bool Equals(IGameEvent other) => other.Id == Id;
-                }}";
+    [Serializable]
+    public sealed class {eventListenerName} : MessageListener<{eventStructName}, {unityEventStructName}> {{}}";
 
                 eventsString.Append(evt);
 
             }
 
-            return $@"// Auto-generated file. Do not edit.
-            using System;
-            using MiniECS; 
+            return
+$@"// Auto-generated file. Do not edit.
+using System;
+using MiniECS; 
+using UnityEngine.Events;
+namespace {_namespace} {{
+    {eventsString}
+}}";
 
-            namespace {_namespace} {{
-                {eventsString}
-            }}";
         }
 
         public string ToPascalCase(string str, TextInfo textInfo)
@@ -165,5 +170,13 @@ namespace MiniECS
         }
 
 #endif
+
+        [Serializable]
+        public struct MessageDefinition
+        {
+            public string Name;
+            public int Id;
+            public readonly override int GetHashCode() => Id;
+        }
     }
 }

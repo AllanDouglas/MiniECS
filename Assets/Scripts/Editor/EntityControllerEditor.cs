@@ -9,7 +9,7 @@ using UnityEngine;
 namespace MiniECS
 {
     // [CustomEditor(typeof(EntityController))]
-    public sealed class EntityControllerEditor : Editor
+    public sealed class EntityControllerEditor : UnityEditor.Editor
     {
         private static List<Type> s_Types;
         private VisualElement _root;

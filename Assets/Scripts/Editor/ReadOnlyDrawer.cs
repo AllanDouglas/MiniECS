@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using MiniECS.Framework;
+using MiniECS;
 
-namespace MiniECS.Framework.Editor
+namespace MiniECS.Editor
 {
     [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     public class ReadOnlyDrawer : PropertyDrawer

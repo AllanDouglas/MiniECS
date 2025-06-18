@@ -8,7 +8,7 @@ namespace MiniECS
         private readonly static MessageBroker _messageBroker = new();
 
         public SignalBus EventBus => _eventBus;
-        public MessageBroker MessageBroker => _messageBroker;
+        public MessageBus MessageBus => MessageBus;
 
     }
 }

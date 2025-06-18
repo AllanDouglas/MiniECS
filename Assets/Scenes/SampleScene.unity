@@ -297,9 +297,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 3882763724093391021
       type: {class: DefaultGameMode, ns: MiniECS, asm: MiniECS}
-      data: 
 --- !u!4 &371518791
 Transform:
   m_ObjectHideFlags: 0
@@ -682,15 +683,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _components:
-  - rid: 3882763724093391019
+  - rid: 3882764105172648014
   references:
     version: 2
     RefIds:
-    - rid: 3882763724093391019
-      type: {class: TransformComponentPrototype, ns: MiniECS, asm: MiniECS}
+    - rid: 3882764105172648014
+      type: {class: TransformComponentPrototype, ns: MiniECS, asm: Assembly-CSharp}
       data:
         _component:
-          position: {x: 0, y: 0, z: 10}
+          position: {x: 0, y: 0, z: 0}
           rotation: {x: 0, y: 0, z: 0}
           scale: {x: 0, y: 0, z: 0}
 --- !u!4 &1202935996
@@ -719,6 +720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1499875415}
   - component: {fileID: 1499875414}
+  - component: {fileID: 1499875416}
   m_Layer: 0
   m_Name: Entity Transform And Velocity
   m_TagString: Untagged
@@ -739,23 +741,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _components:
-  - rid: 3882763724093391019
-  - rid: 3882763729129701440
+  - rid: 3882764105172648013
+  - rid: 3882764105172648012
   references:
     version: 2
     RefIds:
-    - rid: 3882763724093391019
-      type: {class: TransformComponentPrototype, ns: MiniECS, asm: MiniECS}
+    - rid: 3882764105172648012
+      type: {class: VelocityComponentPrototype, ns: MiniECS, asm: Assembly-CSharp}
       data:
         _component:
-          position: {x: 2.56, y: 0, z: 0.01}
+          velocity: {x: 0, y: 0, z: 0}
+    - rid: 3882764105172648013
+      type: {class: TransformComponentPrototype, ns: MiniECS, asm: Assembly-CSharp}
+      data:
+        _component:
+          position: {x: 0, y: 0, z: 0}
           rotation: {x: 0, y: 0, z: 0}
           scale: {x: 0, y: 0, z: 0}
-    - rid: 3882763729129701440
-      type: {class: VelocityComponentPrototype, ns: MiniECS, asm: MiniECS}
-      data:
-        _component:
-          velocity: {x: 0, y: 0, z: 10}
 --- !u!4 &1499875415
 Transform:
   m_ObjectHideFlags: 0
@@ -772,6 +774,36 @@ Transform:
   - {fileID: 986466768}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1499875416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499875413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a8ad92fbff9d4f57846ab187aef5c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listeners:
+  - rid: 3882764108072222784
+  - rid: 3882764108072222788
+  references:
+    version: 2
+    RefIds:
+    - rid: 3882764108072222784
+      type: {class: Teste02Listener, ns: Game, asm: Assembly-CSharp}
+      data:
+        _onPerform:
+          m_PersistentCalls:
+            m_Calls: []
+    - rid: 3882764108072222788
+      type: {class: Teste01Listener, ns: Game, asm: Assembly-CSharp}
+      data:
+        _onPerform:
+          m_PersistentCalls:
+            m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

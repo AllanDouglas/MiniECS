@@ -43,7 +43,7 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
             pos.z += vel.z * context.DeltaTime;
         }
     }
-    
+
     // Example GameMode using MovementSystem
     public class ExampleGameMode : IGameMode
     {
@@ -59,8 +59,7 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
 
         public void Update(Game game)
         {
-            float deltaTime = game.DeltaTime; // Or your deltaTime source
-            movementSystem.Update(game, deltaTime);
+            movementSystem.Update(game, Time.deltaTime);
         }
 
         public void FixedUpdate(Game game) { }

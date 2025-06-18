@@ -12,7 +12,7 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/allandouglas/MiniECS.git
+    git clone https://github.com/AllanDouglas/MiniECS
     ```
 
 2. **Import into Unity:**
@@ -65,9 +65,9 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
         public void FixedUpdate(Game game) { }
         public void LateUpdate(Game game) { }
     }
-
+    //TODO : Work in progress
     ```
-
+    
 ## License
 
 This project is licensed under the MIT License.

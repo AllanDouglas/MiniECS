@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEngine;
 using UnityEngine.UIElements;
 namespace MiniECS
 {
@@ -57,7 +58,8 @@ namespace MiniECS
             var currentType = property.managedReferenceValue?.GetType();
             var currentIndex = currentType == null ? 0 : typeChoices.IndexOf(currentType.FullName);
 
-            var popup = new PopupField<string>("Type", typeChoices, currentIndex);
+            var popup = new PopupField<string>("Select", typeChoices, currentIndex);
+
             container.Add(popup);
             var subContainer = new VisualElement();
 
@@ -81,8 +83,24 @@ namespace MiniECS
 
                         if (iterator.propertyPath.Contains(property.propertyPath + "."))
                         {
-                            PropertyField field = new PropertyField(iterator);
-                            subContainer.Add(field);
+                            Label label = new(ObjectNames.NicifyVariableName(property.managedReferenceValue.GetType().Name));
+                            label.style.unityFontStyleAndWeight = FontStyle.Bold;
+                            label.style.paddingBottom = Length.Percent(1);
+                            label.style.paddingTop = Length.Percent(1);
+                            var box = new Box();
+                            box.style.backgroundColor = new StyleColor(new Color(0.15f, 0.15f, 0.15f, 1f));
+                            box.style.marginBottom = 4;
+                            box.style.paddingLeft = 10;
+                            box.style.paddingRight = 8;
+                            box.style.paddingTop = 4;
+                            box.style.paddingBottom = 4;
+
+                            PropertyField field = new(iterator);
+                            box.Add(field);
+
+                            subContainer.Add(label);
+                            subContainer.Add(box);
+
                             enterChildren = false;
                         }
                     }

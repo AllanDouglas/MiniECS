@@ -22,7 +22,7 @@ namespace MiniECS
         {
             Entity entity = EntityManager.AddEntityController(entityController);
             ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
-
+            entityController.Entity = entity;
             ArchetypeManager.Set(in entity, archetype);
 
         }

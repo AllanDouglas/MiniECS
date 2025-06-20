@@ -27,5 +27,8 @@ namespace MiniECS
             return componentsPool.GetComponentID<TComponent>();
         }
 
+        public virtual void OnDrawGizmos(EntityController entityController) { }
+        public virtual void Bind(EntityController entityController) { }
+
     }
 }

@@ -16,6 +16,8 @@ namespace MiniECS
         public ComponentArchetype(ComponentID componentID) : this((int)componentID.value) { }
         public ComponentArchetype(ComponentArchetype archetype) : this(archetype.value) { }
 
+        public bool Contains(ComponentID componentID) => (value & (1u << (int)componentID.value)) != 0;
+        public bool Contains(ComponentArchetype other) => (value & other.value) == other.value;
         public bool Equals(ComponentArchetype other) => value == other.value;
         public override bool Equals(object obj) => obj is ComponentArchetype other && value == other.value;
         public override int GetHashCode() => value.GetHashCode();

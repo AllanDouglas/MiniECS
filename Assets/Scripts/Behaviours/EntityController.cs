@@ -24,27 +24,28 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
-
-            foreach (var item in Components)
+            if (Components != null)
             {
-                if (item != null)
+                foreach (var item in Components)
                 {
-                    item.Bind(this);
+                    if (item != null)
+                    {
+                        item.Bind(this);
+                    }
                 }
             }
         }
-        void OnValidate()
-        {
-
-        }
-
+        
         void OnDrawGizmos()
         {
-            foreach (var item in Components)
+            if (Components != null)
             {
-                if (item != null)
+                foreach (var item in Components)
                 {
-                    item.OnDrawGizmos(this);
+                    if (item != null)
+                    {
+                        item.OnDrawGizmos(this);
+                    }
                 }
             }
         }

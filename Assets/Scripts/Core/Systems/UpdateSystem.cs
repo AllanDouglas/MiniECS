@@ -22,7 +22,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     OnUpdate(new(game, entity, deltaTime), ref component);
@@ -93,7 +93,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -132,7 +132,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -174,7 +174,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -219,7 +219,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -267,7 +267,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -318,7 +318,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -372,7 +372,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
@@ -429,7 +429,7 @@ namespace MiniECS
 
                 ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
 
-                if (_archetype == entityArchetype)
+                if (entityArchetype.Contains(_archetype))
                 {
                     ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                     ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);

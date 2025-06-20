@@ -8,14 +8,13 @@ namespace MiniECS
         [SerializeField] private bool _enabled;
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
-        [SerializeField] private int _componentPoolSize = 100;
-
+        
         [SerializeField, HideInInspector] private EntityController[] _entities;
 
         void Awake()
         {
             GameLoopController.Instance.gameMode = _gameMode;
-            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize, _componentPoolSize);
+            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
 
             for (int i = 0; i < _entities.Length; i++)
             {
@@ -57,9 +56,9 @@ namespace MiniECS
                 }
             }
 
-            public void Init(int entityBufferSize, int componentsBufferSize, int componentPoolSize)
+            public void Init(int entityBufferSize, int componentsBufferSize)
             {
-                game = new(entityBufferSize, componentsBufferSize, componentPoolSize, EventBus);
+                game = new(entityBufferSize, componentsBufferSize, EventBus);
             }
 
             void OnEnable()

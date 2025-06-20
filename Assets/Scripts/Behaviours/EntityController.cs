@@ -13,7 +13,7 @@ namespace MiniECS
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
-        public Entity Entity { get; set; }
+        public Entity Entity { get; set; } = Entity.Null;
 
 #if UNITY_EDITOR
         void ISerializationCallbackReceiver.OnAfterDeserialize() { }
@@ -35,7 +35,7 @@ namespace MiniECS
                 }
             }
         }
-        
+
         void OnDrawGizmos()
         {
             if (Components != null)

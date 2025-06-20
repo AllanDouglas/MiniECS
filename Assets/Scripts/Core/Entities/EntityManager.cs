@@ -22,7 +22,7 @@ namespace MiniECS
 
         public int EntityCount { get => _entityCount; private set => _entityCount = value; }
         public ReadOnlySpan<Entity> Entities => new(_entities);
-        public ReadOnlySpan<int> ActiveEntitiesIndies => new(_activeEntities);
+        public ReadOnlySpan<int> ActiveEntitiesIndies => new(_activeEntities, 0, _activeEntitiesCount);
         public ReadOnlySpan<EntityController> EntityControllers => new(_entityControllers);
         public EntityAllocator EntityAllocator => _entityAllocator;
 
@@ -47,6 +47,8 @@ namespace MiniECS
             _activeEntities[index] = _activeEntities[_activeEntitiesCount - 1];
             _activeEntitiesCount--;
         }
+
+        public void Deactivate(in Entity entity) => Deactivate(Array.IndexOf(_activeEntities, (int)entity.id));
 
         public void Active(in Entity entity)
         {

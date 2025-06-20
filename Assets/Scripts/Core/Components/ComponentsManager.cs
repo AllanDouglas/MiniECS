@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace MiniECS
 {
@@ -9,14 +8,14 @@ namespace MiniECS
         private int _componentID = 0;
         private readonly Dictionary<Type, (int id, IComponentPool pool)> _componentCache;
         private readonly IComponentPool[] _componentsPool;
-        private readonly int _sizeBuffer;
+        private readonly int _componentBufferSize;
         private readonly int _componentsPoolSize;
 
-        public ComponentsManager(int componentsBufferSize, int componentsPoolSize)
+        public ComponentsManager(int componentsPoolSize, int componentsBufferSize)
         {
-            _componentCache = new(componentsBufferSize);
-            _sizeBuffer = componentsBufferSize;
-            _componentsPoolSize = componentsBufferSize;
+            _componentCache = new(componentsPoolSize);
+            _componentBufferSize = componentsBufferSize;
+            _componentsPoolSize = componentsPoolSize;
             _componentsPool = new IComponentPool[componentsPoolSize];
         }
 
@@ -26,7 +25,7 @@ namespace MiniECS
 
             for (int i = 0; i < componentPrototypes.Length; i++)
             {
-                ComponentID componentID = componentPrototypes[i].AddToComponentPool(this, _componentsPoolSize);
+                ComponentID componentID = componentPrototypes[i].AddToComponentPool(this, _componentBufferSize);
                 componentPrototypes[i].AddComponentToEntity(entity, this);
                 componentArchetype += componentID;
             }
@@ -64,7 +63,7 @@ namespace MiniECS
                 return new(poolSet.id);
             }
 
-            return new(-1);
+            return new(Add(new ComponentPool<TComponent>(_componentBufferSize)));
         }
 
         public int Add(IComponentPool componentPool)
@@ -100,12 +99,11 @@ namespace MiniECS
             return TryGetComponentPool(typeof(TComponent), out componentPool);
         }
 
-        public ref TComponent TryGet<TComponent>(in Entity entity, out bool hasComponent)
-           where TComponent : struct, IComponent
-        {
-            return ref _componentCache[typeof(TComponent)].pool.TryGet<TComponent>(entity, out hasComponent);
-        }
-        
+        public ref TComponent TryGet<TComponent>(in Entity entity, out bool hasComponent) where TComponent : struct, IComponent =>
+             ref _componentCache[typeof(TComponent)].pool.TryGet<TComponent>(entity, out hasComponent);
+
+        public ref TComponent Get<TComponent>(in Entity entity) where TComponent : struct, IComponent =>
+             ref _componentCache[typeof(TComponent)].pool.Get<TComponent>(entity);
 
         private bool TryGetComponentPool(Type componentType, out IComponentPool componentPool)
         {

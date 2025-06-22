@@ -56,5 +56,6 @@ namespace MiniECS
             _activeEntitiesCount++;
         }
 
+        public EntityController GetEntityController(in Entity target) => _entityControllers[target.id];
     }
 }

@@ -11,10 +11,11 @@ using UnityEditor.Compilation;
 namespace MiniECS
 {
 
-    [CreateAssetMenu(menuName = "ClapClap/Events/Data/MessageSettings")]
+    [CreateAssetMenu(menuName = "MiniECS/Config/MessageSettings")]
     public sealed class MessageSettingsSO : ScriptableObject
     {
         [SerializeField, PathSelector] private string _output = "Assets/_Game/Scripts/Generated";
+        [SerializeField] private string _fileName = "messages.g.cs";
         [SerializeField, PathSelector] private string _namespace = "Game";
         [SerializeField] private int _incrementalEventId = 1;
         [SerializeField] private MessageDefinition[] _messages;
@@ -42,7 +43,7 @@ namespace MiniECS
             if (_eventsHash != currentEventHash)
             {
                 _eventsHash = currentEventHash;
-                string filePath = Path.Combine(_output, "GameEvents.g.cs");
+                string filePath = Path.Combine(_output, _fileName);
 
                 string classContent = GenerateClassContent(_messages);
                 try
@@ -106,9 +107,9 @@ namespace MiniECS
             {
 
                 string eventName = ToPascalCase(eventDefinition.Name, textInfo);
-                var eventStructName = $"{eventName}Event";
+                var eventStructName = $"{eventName}Message";
                 var unityEventStructName = $"{eventName}UnityEvent";
-                var eventListenerName = $"{eventName}Listener";
+                var eventListenerName = $"{eventName}MessageListener";
 
                 var evt = $@"
     [Serializable]

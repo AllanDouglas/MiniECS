@@ -18,17 +18,20 @@ namespace MiniECS
 
         public readonly EntityManager EntityManager;
         public readonly EventBus EventBus;
+        public readonly MessageBus MessageBus;
         public readonly ComponentsManager ComponentsManager;
         public readonly ArchetypeManager ArchetypeManager;
 
         public Game(int entityBufferSize = 100,
                     int componentsBufferSize = 100,
-                    EventBus eventBus = null)
+                    EventBus eventBus = null,
+                    MessageBus messageBus = null)
         {
             EntityManager = new(entityBufferSize);
             ArchetypeManager = new(entityBufferSize);
             ComponentsManager = new(componentsBufferSize, entityBufferSize);
             EventBus = eventBus ?? new();
+            MessageBus = messageBus ?? new();
         }
 
         public void AddEntityPrototype(EntityController entityController)

@@ -58,7 +58,7 @@ namespace MiniECS
 
             public void Init(int entityBufferSize, int componentsBufferSize)
             {
-                game = new(entityBufferSize, componentsBufferSize, EventBus);
+                game = new(entityBufferSize, componentsBufferSize, EventBus, MessageBus);
             }
 
             void OnEnable()
@@ -90,6 +90,7 @@ namespace MiniECS
             {
                 gameMode.LateUpdate(game);
                 EventBus.FlushAll();
+                MessageBus.FlushAll();
             }
 
 

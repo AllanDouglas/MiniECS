@@ -7,6 +7,13 @@ namespace MiniECS
 
     public sealed class MessageBus
     {
+        private interface IFlushable
+        {
+            public void Flush();
+        }
+
+        private static readonly List<IFlushable> _flushers = new();
+
         public void Subscribe<TMessage>(GameObject listener, Action<TMessage> action)
             where TMessage : struct, IMessage
         {
@@ -22,7 +29,7 @@ namespace MiniECS
         public void Dispatch<T>(GameObject target, T message)
             where T : struct, IMessage
         {
-            MessageStorage<T>.Instance.Dispatch(target, message);
+            MessageStorage<T>.Instance.Enqueue(target, message);
         }
         public void Subscribe<T>(MiniECSBehaviour listener, Action<T> action)
             where T : struct, IMessage
@@ -42,7 +49,7 @@ namespace MiniECS
             where T : struct, IMessage
         {
             if (target != null)
-                MessageStorage<T>.Instance.Dispatch(target.gameObject, message);
+                MessageStorage<T>.Instance.Enqueue(target.gameObject, message);
         }
 
         public void Subscribe<T>(MonoBehaviour listener, Action<T> action)
@@ -63,28 +70,58 @@ namespace MiniECS
             where T : struct, IMessage
         {
             if (target != null)
-                MessageStorage<T>.Instance.Dispatch(target.gameObject, message);
+                MessageStorage<T>.Instance.Enqueue(target.gameObject, message);
         }
 
+        public void Flush<T>() where T : struct, IMessage
+            => MessageStorage<T>.Instance.Flush();
 
-        private sealed class MessageStorage<TMessage> where TMessage : struct, IMessage
+        public void FlushAll()
         {
-            private readonly Dictionary<GameObject, List<WeakReference<Action<TMessage>>>> _listeners;
+            for (int i = 0; i < _flushers.Count; i++)
+            {
+                _flushers[i].Flush();
+            }
+        }
+
+        private sealed class MessageStorage<TMessage> : IFlushable where TMessage : struct, IMessage
+        {
             private static MessageStorage<TMessage> _instance;
-            public static MessageStorage<TMessage> Instance => _instance ??= new();
+            public static MessageStorage<TMessage> Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new();
+                        _flushers.Add(_instance);
+                    }
+
+                    return _instance;
+                }
+            }
+
+            private readonly Dictionary<GameObject, List<Action<TMessage>>> _listeners = new();
+            private readonly Queue<(GameObject target, TMessage message)> _messageQueue = new();
+
+            public void Flush()
+            {
+                while (_messageQueue.Count > 0)
+                {
+                    var (target, message) = _messageQueue.Dequeue();
+                    Dispatch(target, message);
+                }
+            }
+
+            public void Enqueue(GameObject target, TMessage message)
+            {
+                _messageQueue.Enqueue((target, message));
+            }
+
             public void Subscribe(GameObject listener, Action<TMessage> action)
             {
                 if (_listeners.TryGetValue(listener, out var actions))
                 {
-                    for (int i = actions.Count - 1; i >= 0; i--)
-                    {
-                        if (!actions[i].TryGetTarget(out var target))
-                        {
-                            actions[i].SetTarget(action);
-                            return;
-                        }
-                    }
-
                     actions.Add(new(action));
                     return;
                 }
@@ -98,24 +135,23 @@ namespace MiniECS
                 {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
-                        if (actions[i].TryGetTarget(out var target) && target == action)
+                        if (actions[i] == action)
                         {
-                            actions[i].SetTarget(null);
+                            actions[i] = actions[^1];
+                            actions.RemoveAt(actions.Count - 1);
+                            return;
                         }
                     }
                 }
             }
 
-            public void Dispatch(GameObject target, TMessage message)
+            private void Dispatch(GameObject target, TMessage message)
             {
                 if (_listeners.TryGetValue(target, out var actions))
                 {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
-                        if (actions[i].TryGetTarget(out var action))
-                        {
-                            action.Invoke(message);
-                        }
+                        actions[i].Invoke(message);
                     }
                 }
             }

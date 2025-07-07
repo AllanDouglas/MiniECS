@@ -1,5 +1,3 @@
-using Codice.Client.Common;
-
 namespace MiniECS
 {
     public readonly struct FilterContext

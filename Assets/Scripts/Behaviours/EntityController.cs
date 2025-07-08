@@ -12,10 +12,19 @@ namespace MiniECS
 #endif
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
+        [SerializeField, ReadOnly] private EntityController _parentEntity;
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
+        public EntityController ParentEntity => _parentEntity;
 
 #if UNITY_EDITOR
+
+        void OnValidate()
+        {
+            var parentEntity = GetComponentInParent<EntityController>();
+            _parentEntity = parentEntity != this ? parentEntity : null;
+        }
+
         void ISerializationCallbackReceiver.OnAfterDeserialize() { }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()
@@ -24,14 +33,12 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
+
             if (Components != null)
             {
                 foreach (var item in Components)
                 {
-                    if (item != null)
-                    {
-                        item.Bind(this);
-                    }
+                    item?.Bind(this);
                 }
             }
         }
@@ -42,15 +49,10 @@ namespace MiniECS
             {
                 foreach (var item in Components)
                 {
-                    if (item != null)
-                    {
-                        item.OnDrawGizmos(this);
-                    }
+                    item?.OnDrawGizmos(this);
                 }
             }
         }
-
-
 #endif
 
     }

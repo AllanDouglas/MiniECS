@@ -52,6 +52,13 @@ namespace MiniECS
                 MessageStorage<T>.Instance.Enqueue(target.gameObject, message);
         }
 
+        public void Dispatch<T>(MiniECSBehaviour target)
+            where T : struct, IMessage
+        {
+            if (target != null)
+                MessageStorage<T>.Instance.Enqueue(target.gameObject, default);
+        }
+
         public void Subscribe<T>(MonoBehaviour listener, Action<T> action)
             where T : struct, IMessage
         {

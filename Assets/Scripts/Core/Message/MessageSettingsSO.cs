@@ -16,7 +16,7 @@ namespace MiniECS
     {
         [SerializeField, PathSelector] private string _output = "Assets/_Game/Scripts/Generated";
         [SerializeField] private string _fileName = "messages.g.cs";
-        [SerializeField, PathSelector] private string _namespace = "Game";
+        [SerializeField] private string _namespace = "Game";
         [SerializeField] private int _incrementalEventId = 1;
         [SerializeField] private MessageDefinition[] _messages;
 

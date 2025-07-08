@@ -9,6 +9,8 @@ namespace MiniECS
         where TComponent : struct, IComponent
     {
         [SerializeField] protected TComponent _component;
+        [SerializeField] protected bool _useComponentCapacity;
+        [SerializeField] protected int _poolCapacity = 4;
 
         public ref TComponent Component => ref _component;
 
@@ -21,7 +23,7 @@ namespace MiniECS
         {
             if (!componentsPool.TryGetComponentPool<TComponent>(out _))
             {
-                componentsPool.Add(new ComponentPool<TComponent>(capacity));
+                componentsPool.Add(new ComponentPool<TComponent>(!_useComponentCapacity ? capacity : _poolCapacity));
             }
 
             return componentsPool.GetComponentID<TComponent>();

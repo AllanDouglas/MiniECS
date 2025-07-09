@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace MiniECS
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
         public EntityController ParentEntity => _parentEntity;
+        public Game Game { get; set; }
+
+        public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
+        {
+            return Game.ComponentsManager.Get<TComponent>(Entity);
+        }
 
 #if UNITY_EDITOR
 
@@ -53,6 +60,7 @@ namespace MiniECS
                 }
             }
         }
+
 #endif
 
     }

@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace MiniECS
@@ -22,6 +23,15 @@ namespace MiniECS
                 _listeners[i].Disable(gameObject, this.MessageBus);
             }
         }
+#if UNITY_EDITOR
+        void OnValidate()
+        {
+            if (SerializationUtility.HasManagedReferencesWithMissingTypes(this))
+            {
+                SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
+            }
+        }
+#endif
 
 
     }

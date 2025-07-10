@@ -112,7 +112,6 @@ namespace MiniECS
                 var eventListenerName = $"{eventName}MessageListener";
 
                 var evt = $@"
-    [Serializable]
     public partial struct {eventStructName}: IMessage
     {{
         public readonly int Id => {eventDefinition.Id};

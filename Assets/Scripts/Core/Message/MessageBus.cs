@@ -9,7 +9,8 @@ namespace MiniECS
     {
         private interface IFlushable
         {
-            public void Flush();
+            void Flush();
+            void Clear();
         }
 
         private static readonly List<IFlushable> _flushers = new();
@@ -91,6 +92,14 @@ namespace MiniECS
             }
         }
 
+        public void Clear()
+        {
+            for (int i = 0; i < _flushers.Count; i++)
+            {
+                _flushers[i].Clear();
+            }
+        }
+
         private sealed class MessageStorage<TMessage> : IFlushable where TMessage : struct, IMessage
         {
             private static MessageStorage<TMessage> _instance;
@@ -129,11 +138,11 @@ namespace MiniECS
             {
                 if (_listeners.TryGetValue(listener, out var actions))
                 {
-                    actions.Add(new(action));
+                    actions.Add(action);
                     return;
                 }
 
-                _listeners.Add(listener, new() { new(action) });
+                _listeners.Add(listener, new() { action });
             }
 
             public void Unsubscribe(GameObject listener, Action<TMessage> action)
@@ -163,6 +172,11 @@ namespace MiniECS
                 }
             }
 
+            public void Clear()
+            {
+                _messageQueue.Clear();
+                _listeners.Clear();
+            }
         }
 
     }

@@ -9,6 +9,7 @@ namespace MiniECS
         private interface IFlushable
         {
             public void Flush();
+            void Clear();
         }
 
         private readonly List<IFlushable> _flushers = new();
@@ -36,6 +37,14 @@ namespace MiniECS
             }
         }
 
+        public void Clear()
+        {
+            for (int i = 0; i < _flushers.Count; i++)
+            {
+                _flushers[i].Clear();
+            }
+        }
+
         private sealed class EventStorage<T> : IFlushable where T : struct, IEvent
         {
             public List<T> queue = new();
@@ -52,11 +61,9 @@ namespace MiniECS
 
                 return _instance;
             }
-
             public void Subscribe(Action<T> callback) => listeners += callback;
             public void Unsubscribe(Action<T> callback) => listeners -= callback;
             public void Dispatch(T evt) => queue.Add(evt);
-
             public void Flush()
             {
                 if (listeners != null)
@@ -68,6 +75,11 @@ namespace MiniECS
                 }
 
                 queue.Clear();
+            }
+
+            public void Clear()
+            {
+                listeners = null;
             }
         }
     }

@@ -1,7 +1,4 @@
 namespace MiniECS
 {
-    public interface IMessage
-    {
-        public int Id { get; }
-    }
+    public interface IMessage { }
 }

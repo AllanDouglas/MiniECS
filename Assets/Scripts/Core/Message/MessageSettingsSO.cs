@@ -17,7 +17,7 @@ namespace MiniECS
         [SerializeField, PathSelector] private string _output = "Assets/_Game/Scripts/Generated";
         [SerializeField] private string _fileName = "messages.g.cs";
         [SerializeField] private string _namespace = "Game";
-        [SerializeField] private int _incrementalEventId = 1;
+        
         [SerializeField] private MessageDefinition[] _messages;
 
         [SerializeField, HideInInspector] private int _eventsHash;
@@ -82,19 +82,6 @@ namespace MiniECS
             return hash;
         }
 
-        private void OnValidate()
-        {
-            for (int i = 0; i < _messages.Length; i++)
-            {
-                ref MessageDefinition item = ref _messages[i];
-                if (item.Id == 0)
-                {
-                    item.Id = _incrementalEventId;
-                    _incrementalEventId++;
-                }
-            }
-        }
-
         private string GenerateClassContent(MessageDefinition[] eventDefinitions)
         {
 
@@ -112,10 +99,7 @@ namespace MiniECS
                 var eventListenerName = $"{eventName}MessageListener";
 
                 var evt = $@"
-    public partial struct {eventStructName}: IMessage
-    {{
-        public readonly int Id => {eventDefinition.Id};
-    }}
+    public partial struct {eventStructName}: IMessage {{}}
 
     [Serializable]
     public sealed class {unityEventStructName} : UnityEvent<{eventStructName}> {{}}
@@ -175,8 +159,8 @@ namespace {_namespace} {{
         public struct MessageDefinition
         {
             public string Name;
-            public int Id;
-            public readonly override int GetHashCode() => Id;
+            
+            public readonly override int GetHashCode() => Name.GetHashCode();
         }
     }
 }

@@ -7,25 +7,25 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _archetype = new(_componentID);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component);
                 }
             }
         }
@@ -41,27 +41,27 @@ namespace MiniECS
         private readonly ComponentID _componentID, _componentID1;
 
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _archetype = new(_componentID | _componentID1);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1);
                 }
             }
         }
@@ -76,29 +76,29 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
             _archetype = new(_componentID | _componentID1 | _componentID2);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2);
                 }
             }
         }
@@ -114,31 +114,31 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3);
                 }
             }
         }
@@ -155,33 +155,33 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4);
                 }
             }
         }
@@ -199,35 +199,35 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
-            _componentID5 = game.ComponentsManager.GetComponentID<TComponent5>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID5 = ecsManager.ComponentsManager.GetComponentID<TComponent5>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    ref TComponent5 component5 = ref game.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    ref TComponent5 component5 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
                 }
             }
         }
@@ -246,37 +246,37 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
-            _componentID5 = game.ComponentsManager.GetComponentID<TComponent5>();
-            _componentID6 = game.ComponentsManager.GetComponentID<TComponent6>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID5 = ecsManager.ComponentsManager.GetComponentID<TComponent5>();
+            _componentID6 = ecsManager.ComponentsManager.GetComponentID<TComponent6>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    ref TComponent5 component5 = ref game.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                    ref TComponent6 component6 = ref game.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    ref TComponent5 component5 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
+                    ref TComponent6 component6 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
                 }
             }
         }
@@ -296,39 +296,39 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
-            _componentID5 = game.ComponentsManager.GetComponentID<TComponent5>();
-            _componentID6 = game.ComponentsManager.GetComponentID<TComponent6>();
-            _componentID7 = game.ComponentsManager.GetComponentID<TComponent7>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID5 = ecsManager.ComponentsManager.GetComponentID<TComponent5>();
+            _componentID6 = ecsManager.ComponentsManager.GetComponentID<TComponent6>();
+            _componentID7 = ecsManager.ComponentsManager.GetComponentID<TComponent7>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    ref TComponent5 component5 = ref game.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                    ref TComponent6 component6 = ref game.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                    ref TComponent7 component7 = ref game.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    ref TComponent5 component5 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
+                    ref TComponent6 component6 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
+                    ref TComponent7 component7 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
                 }
             }
         }
@@ -349,41 +349,41 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
-            _componentID5 = game.ComponentsManager.GetComponentID<TComponent5>();
-            _componentID6 = game.ComponentsManager.GetComponentID<TComponent6>();
-            _componentID7 = game.ComponentsManager.GetComponentID<TComponent7>();
-            _componentID8 = game.ComponentsManager.GetComponentID<TComponent8>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID5 = ecsManager.ComponentsManager.GetComponentID<TComponent5>();
+            _componentID6 = ecsManager.ComponentsManager.GetComponentID<TComponent6>();
+            _componentID7 = ecsManager.ComponentsManager.GetComponentID<TComponent7>();
+            _componentID8 = ecsManager.ComponentsManager.GetComponentID<TComponent8>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    ref TComponent5 component5 = ref game.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                    ref TComponent6 component6 = ref game.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                    ref TComponent7 component7 = ref game.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
-                    ref TComponent8 component8 = ref game.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    ref TComponent5 component5 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
+                    ref TComponent6 component6 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
+                    ref TComponent7 component7 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
+                    ref TComponent8 component8 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
                 }
             }
         }
@@ -405,43 +405,43 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8, _componentID9;
 
-        public UpdateSystem(ECSManager game)
+        public UpdateSystem(ECSManager ecsManager)
         {
-            _componentID = game.ComponentsManager.GetComponentID<TComponent>();
-            _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
-            _componentID2 = game.ComponentsManager.GetComponentID<TComponent2>();
-            _componentID3 = game.ComponentsManager.GetComponentID<TComponent3>();
-            _componentID4 = game.ComponentsManager.GetComponentID<TComponent4>();
-            _componentID5 = game.ComponentsManager.GetComponentID<TComponent5>();
-            _componentID6 = game.ComponentsManager.GetComponentID<TComponent6>();
-            _componentID7 = game.ComponentsManager.GetComponentID<TComponent7>();
-            _componentID8 = game.ComponentsManager.GetComponentID<TComponent8>();
-            _componentID9 = game.ComponentsManager.GetComponentID<TComponent9>();
+            _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
+            _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
+            _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
+            _componentID3 = ecsManager.ComponentsManager.GetComponentID<TComponent3>();
+            _componentID4 = ecsManager.ComponentsManager.GetComponentID<TComponent4>();
+            _componentID5 = ecsManager.ComponentsManager.GetComponentID<TComponent5>();
+            _componentID6 = ecsManager.ComponentsManager.GetComponentID<TComponent6>();
+            _componentID7 = ecsManager.ComponentsManager.GetComponentID<TComponent7>();
+            _componentID8 = ecsManager.ComponentsManager.GetComponentID<TComponent8>();
+            _componentID9 = ecsManager.ComponentsManager.GetComponentID<TComponent9>();
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8 | _componentID9);
         }
 
-        public void Update(ECSManager game, float deltaTime)
+        public void Update(ECSManager ecsManager, float deltaTime)
         {
-            for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
+            for (int i = 0; i < ecsManager.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
-                int entityIndex = game.EntityManager.ActiveEntitiesIndies[i];
-                Entity entity = game.EntityManager.Entities[entityIndex];
+                int entityIndex = ecsManager.EntityManager.ActiveEntitiesIndies[i];
+                Entity entity = ecsManager.EntityManager.Entities[entityIndex];
 
-                ComponentArchetype entityArchetype = game.ArchetypeManager.Get(in entity);
+                ComponentArchetype entityArchetype = ecsManager.ArchetypeManager.Get(in entity);
 
                 if (entityArchetype.Contains(_archetype))
                 {
-                    ref TComponent component = ref game.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                    ref TComponent1 component1 = ref game.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                    ref TComponent2 component2 = ref game.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                    ref TComponent3 component3 = ref game.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                    ref TComponent4 component4 = ref game.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                    ref TComponent5 component5 = ref game.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                    ref TComponent6 component6 = ref game.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                    ref TComponent7 component7 = ref game.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
-                    ref TComponent8 component8 = ref game.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
-                    ref TComponent9 component9 = ref game.ComponentsManager.GetComponentPool(_componentID9).Get<TComponent9>(in entity);
-                    OnUpdate(new(game, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
+                    ref TComponent component = ref ecsManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
+                    ref TComponent1 component1 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
+                    ref TComponent2 component2 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
+                    ref TComponent3 component3 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
+                    ref TComponent4 component4 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
+                    ref TComponent5 component5 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
+                    ref TComponent6 component6 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
+                    ref TComponent7 component7 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
+                    ref TComponent8 component8 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
+                    ref TComponent9 component9 = ref ecsManager.ComponentsManager.GetComponentPool(_componentID9).Get<TComponent9>(in entity);
+                    OnUpdate(new(ecsManager, entity, deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
                 }
             }
         }

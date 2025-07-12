@@ -47,50 +47,50 @@ namespace MiniECS
                     return _instance;
                 }
             }
-            public ECSManager game;
+            public ECSManager ecsManager;
             public IGameMode gameMode;
 
             public void RegisterEntityController(EntityController entityController)
             {
                 if (gameMode != null)
                 {
-                    game.AddEntityPrototype(entityController);
+                    ecsManager.AddEntityPrototype(entityController);
                 }
             }
 
             public void Init(int entityBufferSize, int componentsBufferSize)
             {
-                game = new(entityBufferSize, componentsBufferSize, EventBus, MessageBus);
+                ecsManager = new(entityBufferSize, componentsBufferSize, EventBus, MessageBus);
             }
 
             void OnEnable()
             {
-                gameMode?.OnEnable(game);
+                gameMode?.OnEnable(ecsManager);
             }
 
             void OnDisable()
             {
-                gameMode?.OnDisable(game);
+                gameMode?.OnDisable(ecsManager);
             }
 
             void Start()
             {
-                gameMode.Start(game);
+                gameMode.Start(ecsManager);
             }
 
             void Update()
             {
-                gameMode.Update(game);
+                gameMode.Update(ecsManager);
             }
 
             void FixedUpdate()
             {
-                gameMode.FixedUpdate(game);
+                gameMode.FixedUpdate(ecsManager);
             }
 
             void LateUpdate()
             {
-                gameMode.LateUpdate(game);
+                gameMode.LateUpdate(ecsManager);
                 EventBus.FlushAll();
                 MessageBus.FlushAll();
             }

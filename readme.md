@@ -1,6 +1,6 @@
 # MiniECS
 
-MiniECS is a lightweight Entity Component System (ECS) framework designed for Unity projects. It aims to provide a simple, efficient, and flexible architecture for managing game entities and their behaviors.
+MiniECS is a lightweight Entity Component System (ECS) framework designed for Unity projects. It aims to provide a simple, efficient, and flexible architecture for managing ECSManager entities and their behaviors.
 
 ## Features
 
@@ -21,20 +21,28 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
 3. **Usage Example:**
     ```csharp
     // Define a component
+    [Serializable]
     public struct Position : IComponent
     {
         public float x, y, z;
     }
 
+    // Define a Component Prototype to be able to add a this component on editor
+    [Serializable]
+    public sealed class PositionPrototype : ComponentPrototype<Position> { }
+    
+    [Serializable]
     public struct Velocity : IComponent
     {
         public float x, y, z;
     }
+    [Serializable]
+    public sealed class VelocityPrototype : ComponentPrototype<Velocity> { }
 
     // Define a system using UpdateSystem
     public class MovementSystem : UpdateSystem<Position, Velocity>
     {
-        public MovementSystem(Game game) : base(game) { }
+        public MovementSystem(ECSManager ECSManager) : base(ECSManager) { }
 
         protected override void OnUpdate(FilterContext context, ref Position pos, ref Velocity vel)
         {
@@ -44,26 +52,26 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
         }
     }
 
-    // Example GameMode using MovementSystem
+    // Example ECSManagerMode using MovementSystem
     public class ExampleGameMode : IGameMode
     {
         private MovementSystem movementSystem;
 
-        public void OnEnable(Game game)
+        public void OnEnable(ECSManager ecsManager)
         {
-            movementSystem = new MovementSystem(game);
+            movementSystem = new MovementSystem(ecsManager);
         }
 
-        public void OnDisable(Game game) { }
-        public void Start(Game game) { }
+        public void OnDisable(ECSManager ecsManager) { }
+        public void Start(ECSManager ecsManager) { }
 
-        public void Update(Game game)
+        public void Update(ECSManager ecsManager)
         {
-            movementSystem.Update(game, Time.deltaTime);
+            movementSystem.Update(ecsManager, Time.deltaTime);
         }
 
-        public void FixedUpdate(Game game) { }
-        public void LateUpdate(Game game) { }
+        public void FixedUpdate(ECSManager ecsManager) { }
+        public void LateUpdate(ECSManager ecsManager) { }
     }
     //TODO : Work in progress
     ```

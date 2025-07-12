@@ -16,11 +16,16 @@ namespace MiniECS
 
         public Type ComponentType => typeof(T);
 
-        public ComponentPool(int capacity)
+        public ComponentPool(int entityCapacity, int componentCapacity = -1)
         {
-            _sparse = new int[capacity];
-            _dense = new uint[capacity];
-            _components = new T[capacity];
+            if (componentCapacity == -1)
+            {
+                componentCapacity = entityCapacity;
+            }
+
+            _sparse = new int[entityCapacity];
+            _dense = new uint[componentCapacity];
+            _components = new T[componentCapacity];
             Array.Fill(_sparse, -1);
         }
 

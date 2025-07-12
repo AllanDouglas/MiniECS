@@ -23,7 +23,7 @@ namespace MiniECS
         {
             if (!componentsPool.TryGetComponentPool<TComponent>(out _))
             {
-                componentsPool.Add(new ComponentPool<TComponent>(!_useThisCapacity ? capacity : _poolCapacity));
+                componentsPool.Add(new ComponentPool<TComponent>(capacity, !_useThisCapacity ? capacity : _poolCapacity));
             }
 
             return componentsPool.GetComponentID<TComponent>();

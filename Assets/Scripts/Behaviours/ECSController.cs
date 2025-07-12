@@ -54,7 +54,7 @@ namespace MiniECS
             {
                 if (gameMode != null)
                 {
-                    ecsManager.AddEntityPrototype(entityController);
+                    ecsManager.AddEntityController(entityController);
                 }
             }
 

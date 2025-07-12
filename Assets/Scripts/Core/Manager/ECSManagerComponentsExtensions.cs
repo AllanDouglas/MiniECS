@@ -10,20 +10,6 @@ namespace MiniECS
             return ecsManager.ComponentsManager.GetComponentID<TComponent>();
         }
 
-        // Extension for AddComponent<TComponent>(in Entity entity, TComponent component)
-        public static void AddComponent<TComponent>(this ECSManager ecsManager, in Entity entity, TComponent component)
-            where TComponent : struct, IComponent
-        {
-            ecsManager.ComponentsManager.AddComponent<TComponent>(entity, component);
-        }
-
-        // Extension for RemoveComponent<TComponent>(in Entity entity)
-        public static ComponentID RemoveComponent<TComponent>(this ECSManager ecsManager, in Entity entity)
-            where TComponent : struct, IComponent
-        {
-            return ecsManager.ComponentsManager.RemoveComponent<TComponent>(entity);
-        }
-
         // Extension for Get<TComponent>(in Entity entity)
         public static ref TComponent GetComponent<TComponent>(this ECSManager ecsManager, in Entity entity)
             where TComponent : struct, IComponent

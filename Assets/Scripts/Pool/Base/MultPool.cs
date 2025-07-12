@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace MiniECS
 {
-    public class MultPool<TObject> where TObject : Component
+    public class MultiPool<TObject> where TObject : Component
     {
         private readonly Dictionary<TObject, Pool<TObject>> _poolsDict = new();
         private readonly Dictionary<TObject, Pool<TObject>> _trackInstanceDict = new(25);
 
-        public MultPool(int initialBuckets = 4, int initialInstanceCapacity = 25)
+        public MultiPool(int initialBuckets = 4, int initialInstanceCapacity = 25)
         {
             _poolsDict = new(initialBuckets);
             _trackInstanceDict = new(initialInstanceCapacity);

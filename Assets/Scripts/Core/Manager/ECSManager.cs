@@ -6,7 +6,7 @@ namespace MiniECS
     public sealed class ECSManager
     {
 
-        private static readonly MultPool<EntityController> _Pool = new();
+        private static readonly MultiPool<EntityController> _Pool = new();
 
         static ECSManager()
         {
@@ -34,7 +34,7 @@ namespace MiniECS
             MessageBus = messageBus ?? new();
         }
 
-        public void AddEntityPrototype(EntityController entityController)
+        public void AddEntityController(EntityController entityController)
         {
             Entity entity = EntityManager.AddEntityController(entityController);
             ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
@@ -50,14 +50,12 @@ namespace MiniECS
             ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
             ArchetypeManager.Set(entity, ArchetypeManager.Get(in entity) - componentId);
         }
-
-
         public EntityController GetPooledInstance(EntityController prefab)
         {
             EntityController instance = _Pool.Get(prefab);
             if (instance.Entity == Entity.Null)
             {
-                AddEntityPrototype(instance);
+                AddEntityController(instance);
             }
             else
             {

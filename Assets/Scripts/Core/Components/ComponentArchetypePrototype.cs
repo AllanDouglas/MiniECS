@@ -14,7 +14,7 @@ namespace MiniECS
             archetype = new(componentID);
         }
 
-        public readonly IComponentPool GetComponentPool(Game game) => game.ComponentsManager.GetComponentPool(componentID);
+        public readonly IComponentPool GetComponentPool(ECSManager game) => game.ComponentsManager.GetComponentPool(componentID);
 
     }
 }

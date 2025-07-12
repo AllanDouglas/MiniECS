@@ -6,7 +6,7 @@ namespace MiniECS
         public delegate void FilterSystemAction(FilterContext context, ref TComponent component);
 
 
-        public void Execute(Game game, float deltaTime, FilterSystemAction action)
+        public void Execute(ECSManager game, float deltaTime, FilterSystemAction action)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -26,7 +26,7 @@ namespace MiniECS
         where TComponent2 : struct, IComponent
     {
         public delegate void FilterSystemAction(FilterContext context, ref TComponent1 component1, ref TComponent2 component2);
-        public void Execute(Game game, float deltaTime, FilterSystemAction action)
+        public void Execute(ECSManager game, float deltaTime, FilterSystemAction action)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -56,7 +56,7 @@ namespace MiniECS
             _action = action;
         }
 
-        public void Execute(Game game, float deltaTime, FilterSystemAction action)
+        public void Execute(ECSManager game, float deltaTime, FilterSystemAction action)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {

@@ -7,13 +7,13 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _archetype = new(_componentID);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -41,14 +41,14 @@ namespace MiniECS
         private readonly ComponentID _componentID, _componentID1;
 
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
             _archetype = new(_componentID | _componentID1);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -76,7 +76,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -84,7 +84,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -114,7 +114,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -123,7 +123,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -155,7 +155,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -165,7 +165,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -199,7 +199,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -210,7 +210,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -246,7 +246,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -258,7 +258,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -296,7 +296,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -309,7 +309,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -349,7 +349,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -363,7 +363,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {
@@ -405,7 +405,7 @@ namespace MiniECS
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8, _componentID9;
 
-        public UpdateSystem(Game game)
+        public UpdateSystem(ECSManager game)
         {
             _componentID = game.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = game.ComponentsManager.GetComponentID<TComponent1>();
@@ -420,7 +420,7 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8 | _componentID9);
         }
 
-        public void Update(Game game, float deltaTime)
+        public void Update(ECSManager game, float deltaTime)
         {
             for (int i = 0; i < game.EntityManager.ActiveEntitiesIndies.Length; i++)
             {

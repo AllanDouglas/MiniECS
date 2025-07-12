@@ -3,12 +3,12 @@ using UnityEngine.SceneManagement;
 
 namespace MiniECS
 {
-    public sealed class Game
+    public sealed class ECSManager
     {
 
         private static readonly MultPool<EntityController> _Pool = new();
 
-        static Game()
+        static ECSManager()
         {
             SceneManager.activeSceneChanged += (_, _) =>
             {
@@ -22,7 +22,7 @@ namespace MiniECS
         public readonly ComponentsManager ComponentsManager;
         public readonly ArchetypeManager ArchetypeManager;
 
-        public Game(int entityBufferSize = 100,
+        public ECSManager(int entityBufferSize = 100,
                     int componentsBufferSize = 100,
                     EventBus eventBus = null,
                     MessageBus messageBus = null)

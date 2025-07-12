@@ -45,7 +45,7 @@ namespace MiniECS
                     return _instance;
                 }
             }
-            public Game game;
+            public ECSManager game;
             public IGameMode gameMode;
 
             public void RegisterEntityController(EntityController entityController)

@@ -17,7 +17,7 @@ namespace MiniECS
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
         public EntityController ParentEntity => _parentEntity;
-        public Game Game { get; set; }
+        public ECSManager Game { get; set; }
 
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {

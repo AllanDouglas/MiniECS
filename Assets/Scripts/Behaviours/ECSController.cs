@@ -1,14 +1,16 @@
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MiniECS
 {
-    public sealed class LevelController : MiniECSBehaviour
+    [MovedFrom(true, sourceClassName: "LevelController")]
+    public sealed class ECSController : MiniECSBehaviour
     {
         [SerializeReference, ReferencePicker] private IGameMode _gameMode;
         [SerializeField] private bool _enabled;
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
-        
+
         [SerializeField, HideInInspector] private EntityController[] _entities;
 
         void Awake()

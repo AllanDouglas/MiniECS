@@ -75,7 +75,18 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
     }
     //TODO : Work in progress
     ```
-    
+4. Create a EntityController
+    - Add the EntityController to a GameObject:
+
+    - In the Unity Editor, create an empty GameObject.
+    Attach the EntityController script to this GameObject.
+    Assign Component Prototypes:
+
+    - In the Inspector, you’ll see a list where you can add component prototypes (like PositionPrototype, VelocityPrototype).
+    Add and configure these prototypes as needed.
+    Access and Modify Components in Code:
+
+    - You can get a reference to the EntityController and use its API to add, remove, or query components at runtime.
 ## License
 
 This project is licensed under the MIT License.

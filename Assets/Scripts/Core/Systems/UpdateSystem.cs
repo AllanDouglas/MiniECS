@@ -3,12 +3,13 @@ namespace MiniECS
     public abstract class UpdateSystem<TComponent>
         where TComponent : struct, IComponent
     {
-
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _archetype = new(_componentID);
         }
@@ -37,12 +38,14 @@ namespace MiniECS
         where TComponent1 : struct, IComponent
     {
 
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1;
 
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _archetype = new(_componentID | _componentID1);
@@ -73,11 +76,14 @@ namespace MiniECS
         where TComponent1 : struct, IComponent
         where TComponent2 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -111,11 +117,14 @@ namespace MiniECS
         where TComponent2 : struct, IComponent
         where TComponent3 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -152,11 +161,14 @@ namespace MiniECS
         where TComponent3 : struct, IComponent
         where TComponent4 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -196,11 +208,14 @@ namespace MiniECS
         where TComponent4 : struct, IComponent
         where TComponent5 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -243,11 +258,14 @@ namespace MiniECS
         where TComponent5 : struct, IComponent
         where TComponent6 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -293,11 +311,14 @@ namespace MiniECS
         where TComponent6 : struct, IComponent
         where TComponent7 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -346,11 +367,14 @@ namespace MiniECS
         where TComponent7 : struct, IComponent
         where TComponent8 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -402,11 +426,14 @@ namespace MiniECS
         where TComponent8 : struct, IComponent
         where TComponent9 : struct, IComponent
     {
+
+        public readonly ECSManager ECSManager;
         private readonly ComponentArchetype _archetype;
         private readonly ComponentID _componentID, _componentID1, _componentID2, _componentID3, _componentID4, _componentID5, _componentID6, _componentID7, _componentID8, _componentID9;
 
         public UpdateSystem(ECSManager ecsManager)
         {
+            ECSManager = ecsManager;
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();

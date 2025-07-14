@@ -3,6 +3,7 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace MiniECS
 {
+    [DefaultExecutionOrder(-50)]
     [MovedFrom(true, sourceClassName: "LevelController")]
     public sealed class ECSController : MiniECSBehaviour
     {
@@ -13,6 +14,22 @@ namespace MiniECS
 
         [SerializeField] private EntityController[] _entities;
 
+        public ECSManager ECSManager => GameLoopController.Instance.ecsManager;
+
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                if (_enabled)
+                {
+                    GameLoopController.Instance.gameMode ??= _gameMode;
+                }
+                GameLoopController.Instance.enabled = _enabled;
+            }
+        }
+
         void Awake()
         {
             GameLoopController.Instance.gameMode = _gameMode;
@@ -20,10 +37,16 @@ namespace MiniECS
 
             for (int i = 0; i < _entities.Length; i++)
             {
-                GameLoopController.Instance.RegisterEntityController(_entities[i]);
+                RegisterEntityController(_entities[i]);
             }
 
             GameLoopController.Instance.enabled = _enabled;
+        }
+
+
+        public void RegisterEntityController(EntityController entityController)
+        {
+            GameLoopController.Instance.RegisterEntityController(entityController);
         }
 
         void OnValidate()

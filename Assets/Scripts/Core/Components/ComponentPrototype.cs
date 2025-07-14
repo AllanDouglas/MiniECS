@@ -14,8 +14,10 @@ namespace MiniECS
 
         public ref TComponent Component => ref _component;
 
-        public void AddComponentToEntity(in Entity entity, ComponentsManager pool) =>
+        public void AddComponentToEntity(in Entity entity, ComponentsManager pool)
+        {
             pool.GetComponentPool<TComponent>().Add(entity, _component);
+        }
 
         public ref T GetComponent<T>() => ref UnsafeUtility.As<TComponent, T>(ref _component);
 

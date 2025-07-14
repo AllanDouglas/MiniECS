@@ -37,6 +37,10 @@ namespace MiniECS
         public void AddEntityController(EntityController entityController)
         {
             Entity entity = EntityManager.AddEntityController(entityController);
+            foreach (var item in entityController.Components)
+            {
+                item.Bind(entityController);
+            }
             ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
             entityController.Entity = entity;
             entityController.Game = this;

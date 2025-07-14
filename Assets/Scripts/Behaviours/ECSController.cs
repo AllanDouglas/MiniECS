@@ -11,7 +11,7 @@ namespace MiniECS
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
 
-        [SerializeField, HideInInspector] private EntityController[] _entities;
+        [SerializeField] private EntityController[] _entities;
 
         void Awake()
         {

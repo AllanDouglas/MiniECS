@@ -27,7 +27,6 @@ namespace MiniECS
             _fieldInfo = _serializedObject.targetObject.GetType().GetField(_propertyPath,
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-
             var container = new VisualElement();
 
             if (property.propertyType != SerializedPropertyType.ManagedReference)

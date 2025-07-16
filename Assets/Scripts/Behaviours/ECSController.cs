@@ -16,6 +16,8 @@ namespace MiniECS
 
         public ECSManager ECSManager => GameLoopController.Instance.ecsManager;
 
+
+
         public bool Enabled
         {
             get => _enabled;
@@ -27,6 +29,16 @@ namespace MiniECS
                     GameLoopController.Instance.gameMode ??= _gameMode;
                 }
                 GameLoopController.Instance.enabled = _enabled;
+            }
+        }
+
+        public IGameMode GameMode
+        {
+            get => _gameMode;
+            set
+            {
+                _gameMode = value;
+                GameLoopController.Instance.gameMode = _gameMode;
             }
         }
 

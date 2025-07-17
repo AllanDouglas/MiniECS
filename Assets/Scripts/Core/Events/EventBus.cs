@@ -28,6 +28,10 @@ namespace MiniECS
         {
             EventStorage<T>.GetInstance(_flushers).Dispatch(evt);
         }
+        public void Dispatch<T>() where T : struct, IEvent
+        {
+            EventStorage<T>.GetInstance(_flushers).Dispatch(default);
+        }
 
         public void FlushAll()
         {

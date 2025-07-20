@@ -74,11 +74,6 @@ namespace MiniECS
                 if (property.managedReferenceValue != null)
                 {
                     var iterator = property.Copy();
-                    var enterChildren = true;
-                    Label label = new($"Type: {ObjectNames.NicifyVariableName(property.managedReferenceValue.GetType().Name)}");
-                    label.style.unityFontStyleAndWeight = FontStyle.Bold;
-                    label.style.paddingBottom = Length.Percent(1);
-                    label.style.paddingTop = Length.Percent(1);
                     var box = new Box();
                     box.style.backgroundColor = new StyleColor(new Color(0.15f, 0.15f, 0.15f, 1f));
                     box.style.marginBottom = 4;
@@ -86,21 +81,9 @@ namespace MiniECS
                     box.style.paddingRight = 8;
                     box.style.paddingTop = 4;
                     box.style.paddingBottom = 4;
-                    subContainer.Add(label);
                     subContainer.Add(box);
-
-                    while (iterator.NextVisible(enterChildren))
-                    {
-                        if (SerializedProperty.EqualContents(iterator, property))
-                            continue;
-
-                        if (iterator.propertyPath.Contains(property.propertyPath + "."))
-                        {
-                            PropertyField field = new(iterator);
-                            box.Add(field);
-                            enterChildren = false;
-                        }
-                    }
+                    PropertyField t = new(property);
+                    box.Add(t);
                 }
             }
 

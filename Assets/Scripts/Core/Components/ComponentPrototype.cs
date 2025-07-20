@@ -11,7 +11,6 @@ namespace MiniECS
         [SerializeField] protected TComponent _component;
         [SerializeField] protected bool _useThisCapacity;
         [SerializeField] protected int _poolCapacity = 4;
-
         public ref TComponent Component => ref _component;
 
         public void AddComponentToEntity(in Entity entity, ComponentsManager pool)
@@ -33,6 +32,6 @@ namespace MiniECS
 
         public virtual void OnDrawGizmos(EntityController entityController) { }
         public virtual void Bind(EntityController entityController) { }
-
+        public virtual void OnAdd(EntityController entityController) { }
     }
 }

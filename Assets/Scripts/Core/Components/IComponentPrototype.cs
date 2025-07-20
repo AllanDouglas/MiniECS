@@ -9,5 +9,6 @@ namespace MiniECS
         void AddComponentToEntity(in Entity entity, ComponentsManager pool);
         void OnDrawGizmos(EntityController entityController);
         void Bind(EntityController entityController);
+        void OnAdd(EntityController entityController);
     }
 }

@@ -69,6 +69,12 @@ namespace MiniECS
 
             void RefreshSubProperty()
             {
+                var drawProperty = fieldInfo.GetCustomAttribute<ReferencePickerAttribute>(true).DrawProperty;
+                if (!drawProperty)
+                {
+                    return;
+                }
+
                 subContainer.Clear();
                 var property = _serializedObject.FindProperty(_propertyPath);
                 if (property.managedReferenceValue != null)

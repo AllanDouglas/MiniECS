@@ -5,6 +5,9 @@ namespace MiniECS
 {
     public sealed class ComponentsManager
     {
+
+        public static IComponent Trash = new TrashComponent();
+
         private int _componentID = 0;
         private readonly Dictionary<Type, (int id, IComponentPool pool)> _componentCache;
         private readonly IComponentPool[] _componentsPool;
@@ -120,6 +123,8 @@ namespace MiniECS
             componentPool = null;
             return false;
         }
+
+        private struct TrashComponent : IComponent { }
 
     }
 }

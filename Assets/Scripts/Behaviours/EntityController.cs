@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 #endif
 using UnityEngine;
@@ -22,6 +23,20 @@ namespace MiniECS
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
             return Game.ComponentsManager.Get<TComponent>(Entity);
+        }
+
+        public ref TComponent TryGetECSComponent<TComponent>(out bool hasComponent) where TComponent : struct, IComponent
+        {
+            hasComponent = false;
+
+            if (Game is null)
+            {
+                return ref UnsafeUtility.As<IComponent, TComponent>(ref ComponentsManager.Trash);
+            }
+
+            ref var component = ref Game.ComponentsManager.TryGet<TComponent>(Entity, out hasComponent);
+
+            return ref component;
         }
 
 #if UNITY_EDITOR
@@ -50,7 +65,7 @@ namespace MiniECS
             }
         }
 
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             if (Components != null)
             {

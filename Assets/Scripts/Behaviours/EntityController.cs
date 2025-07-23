@@ -18,23 +18,28 @@ namespace MiniECS
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
         public EntityController ParentEntity => _parentEntity;
-        public ECSManager Game { get; set; }
+        public ECSManager ECSManager { get; set; }
+
+        public void Recycle()
+        {
+            ECSManager?.Recycle(Entity);
+        }
 
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
-            return Game.ComponentsManager.Get<TComponent>(Entity);
+            return ECSManager.ComponentsManager.Get<TComponent>(Entity);
         }
 
         public ref TComponent TryGetECSComponent<TComponent>(out bool hasComponent) where TComponent : struct, IComponent
         {
             hasComponent = false;
 
-            if (Game is null)
+            if (ECSManager is null)
             {
                 return ref UnsafeUtility.As<IComponent, TComponent>(ref ComponentsManager.Trash);
             }
 
-            ref var component = ref Game.ComponentsManager.TryGet<TComponent>(Entity, out hasComponent);
+            ref var component = ref ECSManager.ComponentsManager.TryGet<TComponent>(Entity, out hasComponent);
 
             return ref component;
         }

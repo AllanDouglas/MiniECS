@@ -43,7 +43,7 @@ namespace MiniECS
             }
             ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
             entityController.Entity = entity;
-            entityController.Game = this;
+            entityController.ECSManager = this;
             ArchetypeManager.Set(in entity, componentArchetype: archetype);
 
         }

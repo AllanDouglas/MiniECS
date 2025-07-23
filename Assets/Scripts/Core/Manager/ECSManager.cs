@@ -45,7 +45,9 @@ namespace MiniECS
             entityController.Entity = entity;
             entityController.ECSManager = this;
             ArchetypeManager.Set(in entity, componentArchetype: archetype);
-
+#if UNITY_EDITOR
+            entityController.name = $"{entityController.name} - {entity}";
+#endif
         }
 
         public void RemoveComponent<TComponent>(in Entity entity)

@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
 using System;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 #endif
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace MiniECS

@@ -17,9 +17,10 @@ namespace MiniECS
         }
 
         public readonly EntityManager EntityManager;
+        public readonly ComponentsManager ComponentsManager;
+        public readonly SystemsManager SystemsManager;
         public readonly EventBus EventBus;
         public readonly MessageBus MessageBus;
-        public readonly ComponentsManager ComponentsManager;
         public readonly ArchetypeManager ArchetypeManager;
 
         public ECSManager(int entityBufferSize = 100,
@@ -29,6 +30,7 @@ namespace MiniECS
         {
             EntityManager = new(entityBufferSize);
             ArchetypeManager = new(entityBufferSize);
+            SystemsManager = new(entityBufferSize);
             ComponentsManager = new(componentsBufferSize, entityBufferSize);
             EventBus = eventBus ?? new();
             MessageBus = messageBus ?? new();
@@ -45,6 +47,7 @@ namespace MiniECS
             entityController.Entity = entity;
             entityController.ECSManager = this;
             ArchetypeManager.Set(in entity, componentArchetype: archetype);
+
 #if UNITY_EDITOR
             entityController.name = $"{entityController.name} - {entity}";
 #endif

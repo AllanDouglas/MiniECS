@@ -22,7 +22,7 @@ namespace MiniECS
 
         public int EntityCount { get => _entityCount; private set => _entityCount = value; }
         public ReadOnlySpan<Entity> Entities => new(_entities);
-        public ReadOnlySpan<int> ActiveEntitiesIndies => new(_activeEntities, 0, _activeEntitiesCount);
+        public ReadOnlySpan<int> ActiveEntitiesIndices => new(_activeEntities, 0, _activeEntitiesCount);
         public ReadOnlySpan<EntityController> EntityControllers => new(_entityControllers);
         public EntityAllocator EntityAllocator => _entityAllocator;
 

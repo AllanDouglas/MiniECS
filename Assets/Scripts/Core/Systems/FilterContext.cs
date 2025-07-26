@@ -5,8 +5,6 @@ namespace MiniECS
         public readonly ECSManager ecsManager;
         public readonly Entity entity;
         public readonly float deltaTime;
-
-
         public FilterContext(ECSManager ecsManager, Entity entity, float deltaTime)
         {
             this.ecsManager = ecsManager;

@@ -110,7 +110,7 @@ namespace MiniECS
 
             void Start()
             {
-                gameMode.Start(ecsManager);
+                gameMode?.Start(ecsManager);
             }
 
             void Update()

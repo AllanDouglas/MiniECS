@@ -4,11 +4,12 @@ namespace MiniECS
 {
     public readonly struct ComponentArchetype : IEquatable<ComponentArchetype>
     {
-        public static readonly int MaxCapacity = 32;
+        public static readonly int MaxCapacity = 64;
 
-        public readonly uint value;
+        public readonly ulong value;
 
         public ComponentArchetype(int id) => value = 1u << id;
+        public ComponentArchetype(ulong id) => value = id;
         public ComponentArchetype(int id, int id1) => value = 1u << id | 1u << id1;
         public ComponentArchetype(uint value) => this.value = value;
         public ComponentArchetype(ComponentID componentID) : this((int)componentID.value) { }
@@ -22,11 +23,11 @@ namespace MiniECS
 
         public static ComponentArchetype operator +(ComponentArchetype a, ComponentArchetype b) => new(a.value | b.value);
         public static ComponentArchetype operator -(ComponentArchetype a, ComponentArchetype b) => new(a.value & ~b.value);
-        public static ComponentArchetype operator +(ComponentArchetype a, int b) => new(a.value | 1u << b);
-        public static ComponentArchetype operator -(ComponentArchetype a, int b) => new(a.value & ~(1u << b));
-        public static ComponentArchetype operator +(ComponentArchetype a, ComponentID b) => new(a.value | (1u << (int)b.value));
-        public static ComponentArchetype operator -(ComponentArchetype a, ComponentID b) => new(a.value & ~(1u << (int)b.value));
-        public static ComponentArchetype operator |(ComponentArchetype a, ComponentID b) => new(a.value | (1u << (int)b.value));
+        public static ComponentArchetype operator +(ComponentArchetype a, int b) => new(a.value | 1ul << b);
+        public static ComponentArchetype operator -(ComponentArchetype a, int b) => new(a.value & ~(1ul << b));
+        public static ComponentArchetype operator +(ComponentArchetype a, ComponentID b) => new(a.value | (1ul << (int)b.value));
+        public static ComponentArchetype operator -(ComponentArchetype a, ComponentID b) => new(a.value & ~(1ul << (int)b.value));
+        public static ComponentArchetype operator |(ComponentArchetype a, ComponentID b) => new(a.value | (1ul << (int)b.value));
         public static bool operator ==(ComponentArchetype a, ComponentArchetype b) => a.value == b.value;
         public static bool operator !=(ComponentArchetype a, ComponentArchetype b) => a.value != b.value;
     }

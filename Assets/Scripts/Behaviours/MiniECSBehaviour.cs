@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,6 +6,14 @@ namespace MiniECS
 {
     public abstract class MiniECSBehaviour : MonoBehaviour
     {
+#if UNITY_EDITOR
+        [InitializeOnLoadMethod]
+        private static void ResetEventBus()
+        {
+            _eventBus.Clear();
+            _messageBus.Clear();
+        }
+#endif
 
         static MiniECSBehaviour()
         {

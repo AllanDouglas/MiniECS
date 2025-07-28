@@ -59,7 +59,7 @@ namespace MiniECS
             ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
             ArchetypeManager.Set(entity, ArchetypeManager.Get(in entity) - componentId);
         }
-        public EntityController GetPooledInstance(EntityController prefab)
+        public EntityController GetPooledEntityInstance(EntityController prefab)
         {
             EntityController instance = _Pool.Get(prefab);
             if (instance.Entity == Entity.Null)
@@ -73,31 +73,31 @@ namespace MiniECS
             return instance;
         }
 
-        public EntityController GetPooledInstance(EntityController prefab,
+        public EntityController GetPooledEntityInstance(EntityController prefab,
             Transform parent)
         {
-            EntityController instance = GetPooledInstance(prefab);
+            EntityController instance = GetPooledEntityInstance(prefab);
             instance.transform.SetParent(parent);
             return instance;
         }
 
-        public EntityController GetPooledInstance(
+        public EntityController GetPooledEntityInstance(
             EntityController prefab,
             Vector3 position = default,
             Quaternion rotation = default)
         {
-            EntityController instance = GetPooledInstance(prefab);
+            EntityController instance = GetPooledEntityInstance(prefab);
             instance.transform.SetPositionAndRotation(position, rotation);
             return instance;
         }
 
-        public EntityController GetPooledInstance(
+        public EntityController GetPooledEntityInstance(
             EntityController prefab,
             Transform parent,
             Vector3 position,
             Quaternion rotation)
         {
-            EntityController instance = GetPooledInstance(prefab);
+            EntityController instance = GetPooledEntityInstance(prefab);
             instance.transform.SetParent(parent);
             instance.transform.SetPositionAndRotation(position, rotation);
             return instance;

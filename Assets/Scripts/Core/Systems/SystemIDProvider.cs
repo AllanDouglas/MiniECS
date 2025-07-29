@@ -1,4 +1,6 @@
 using UnityEditor;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 namespace MiniECS
 {
@@ -11,6 +13,14 @@ namespace MiniECS
             _NEXT_ID = 0;
         }
 #endif
+
+        static SystemIDProvider()
+        {
+            SceneManager.sceneLoaded += (_, _) =>
+            {
+                _NEXT_ID = 0;
+            };
+        }
 
         private static byte _NEXT_ID = 0;
         public static int Max => 64;

@@ -57,7 +57,27 @@ namespace MiniECS
             var currentType = property.managedReferenceValue?.GetType();
             var currentIndex = currentType == null ? 0 : typeChoices.IndexOf(currentType.FullName);
 
-            var popup = new PopupField<string>("Select", typeChoices, currentIndex);
+            Func<string, string> formatSelectionValue = typeName =>
+            {
+                if (typeName.StartsWith("(None)"))
+                {
+                    return typeName;
+                }
+
+                if (typeName.StartsWith("(None)"))
+                {
+                    return typeName;
+                }
+
+                var lastDotIndex = typeName.LastIndexOf('.');
+                var afterLastDot = lastDotIndex >= 0 ? typeName[..lastDotIndex] : string.Empty;
+                var beforeLastDot = lastDotIndex >= 0 ? typeName[(lastDotIndex + 1)..] : typeName;
+
+                return $"{beforeLastDot} ({afterLastDot})";
+
+            };
+
+            var popup = new PopupField<string>("Select", typeChoices, currentIndex, formatSelectionValue, formatSelectionValue);
 
             container.Add(popup);
             var subContainer = new VisualElement();

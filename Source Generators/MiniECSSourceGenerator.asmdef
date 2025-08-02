@@ -1,0 +1,16 @@
+{
+    "name": "MiniECSSourceGenerator",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "MINI_ECS_SOURCE_GENERATOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

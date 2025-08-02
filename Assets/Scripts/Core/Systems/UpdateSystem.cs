@@ -9,13 +9,12 @@ namespace MiniECS
 
         public UpdateSystem(ECSManager eCSManager)
         {
-            ID = SystemIDProvider.Next();
+            
             ECSManager = eCSManager;
             _componentID = eCSManager.ComponentsManager.GetComponentID<TComponent>();
             _archetype = new(_componentID);
         }
 
-        public SystemID ID { get; }
         public bool Enabled { get; set; } = true;
 
         public void Update(in FrameTime time)
@@ -53,14 +52,13 @@ namespace MiniECS
 
         public UpdateSystem(ECSManager ecsManager)
         {
-            ID = SystemIDProvider.Next();
+            
             ECSManager = ecsManager;
             _componentID = ECSManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ECSManager.ComponentsManager.GetComponentID<TComponent1>();
             _archetype = new(_componentID | _componentID1);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -101,14 +99,13 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
             _archetype = new(_componentID | _componentID1 | _componentID2);
         }
 
-        public SystemID ID { get; }
         public bool Enabled { get; set; } = true;
         public void Update(in FrameTime time)
         {
@@ -149,7 +146,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ECSManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ECSManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ECSManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -157,7 +154,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -202,7 +198,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -211,7 +207,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -258,7 +253,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -268,7 +263,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -318,7 +312,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -329,7 +323,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -381,7 +374,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -393,7 +386,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -447,7 +439,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -460,7 +452,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 
@@ -516,7 +507,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            ID = SystemIDProvider.Next();
+            
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -530,7 +521,6 @@ namespace MiniECS
             _archetype = new(_componentID | _componentID1 | _componentID2 | _componentID3 | _componentID4 | _componentID5 | _componentID6 | _componentID7 | _componentID8 | _componentID9);
         }
 
-        public SystemID ID { get; }
 
         public bool Enabled { get; set; } = true;
 

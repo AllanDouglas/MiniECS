@@ -54,6 +54,7 @@ namespace MiniECS.SourceGenerators
             foreach (var (structName, targetNamespace) in structsToGenerate)
             {
                 var source = $@"
+using MiniECS;
 namespace {targetNamespace}
 {{    
     public sealed partial class {structName}Prototype : ComponentPrototype<{structName}>

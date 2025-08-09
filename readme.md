@@ -21,15 +21,14 @@ MiniECS is a lightweight Entity Component System (ECS) framework designed for Un
 3. **Usage Example:**
     ```csharp
     // Define a component
-    [Serializable]
+    [Serializable, GeneratePrototype(targetNamespace: "Game")]
     public struct Position : IComponent
     {
         public float x, y, z;
     }
 
-    // Define a Component Prototype to be able to add a this component on editor
-    [Serializable]
-    public sealed class PositionPrototype : ComponentPrototype<Position> { }
+    // optional: Define a Component Prototype to be able to add a this component on editor
+    public sealed partial class PositionPrototype { }
     
     [Serializable]
     public struct Velocity : IComponent

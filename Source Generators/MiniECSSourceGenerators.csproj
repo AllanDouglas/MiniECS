@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>MiniECS.SourceGenerators</RootNamespace>
+    <OutputItemType>Analyzer</OutputItemType>
+    <!-- <LangVersion>10</LangVersion> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+  </ItemGroup>
+  <Target Name="PostBuild_CopyToUnity" AfterTargets="Build">
+      <!-- Create output folder if it doesn't exist -->
+      <MakeDir Directories="$(MSBuildProjectDirectory)\..\Assets\Analyzers" />
+
+      <!-- Copy DLL to Unity Analyzers folder -->
+      <Copy
+        SourceFiles="$(OutputPath)$(TargetFileName)"
+        DestinationFolder="$(MSBuildProjectDirectory)\..\Assets\Analyzers"
+        SkipUnchangedFiles="true" />
+
+      <!-- Optional: Delete obj and bin folders -->
+      <RemoveDir Directories="$(MSBuildProjectDirectory)\obj" />
+      <RemoveDir Directories="$(MSBuildProjectDirectory)\bin" />
+
+      <Exec Command="dotnet restore &quot;$(MSBuildProjectDirectory)\MiniECSSourceGenerators.csproj&quot;" />
+  </Target>
+</Project>

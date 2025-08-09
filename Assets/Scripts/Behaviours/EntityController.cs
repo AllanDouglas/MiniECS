@@ -4,6 +4,7 @@ using UnityEditor;
 #endif
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using System.Linq;
 
 namespace MiniECS
 {
@@ -14,11 +15,11 @@ namespace MiniECS
 #endif
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
-        [SerializeField, ReadOnly] private EntityController _parentEntity;
+        [SerializeField, ReadOnly] private EntityController[] _children;
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
-        public EntityController ParentEntity => _parentEntity;
         public ECSManager ECSManager { get; set; }
+        public EntityController[] Children { get => _children; }
 
         public void Recycle()
         {
@@ -48,8 +49,7 @@ namespace MiniECS
 
         void OnValidate()
         {
-            var parentEntity = GetComponentInParent<EntityController>();
-            _parentEntity = parentEntity != this ? parentEntity : null;
+            _children = GetComponentsInChildren<EntityController>().Where(e => e != this).ToArray();
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize() { }
@@ -60,6 +60,7 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
+
 
             if (Components != null)
             {

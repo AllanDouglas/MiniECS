@@ -30,7 +30,7 @@ namespace MiniECS
                     if (entityArchetype.Contains(_archetype))
                     {
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace MiniECS
                     {
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1);
                     }
                 }
             }
@@ -122,7 +122,7 @@ namespace MiniECS
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2);
                     }
                 }
             }
@@ -173,7 +173,7 @@ namespace MiniECS
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3);
                     }
                 }
             }
@@ -227,7 +227,7 @@ namespace MiniECS
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4);
                     }
                 }
             }
@@ -284,7 +284,7 @@ namespace MiniECS
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
                     }
                 }
             }
@@ -345,7 +345,7 @@ namespace MiniECS
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
                     }
                 }
             }
@@ -409,7 +409,7 @@ namespace MiniECS
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
                     }
                 }
             }
@@ -476,7 +476,7 @@ namespace MiniECS
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
                         ref TComponent8 component8 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
                     }
                 }
             }
@@ -551,7 +551,7 @@ namespace MiniECS
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
                         ref TComponent8 component8 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
                         ref TComponent9 component9 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID9).Get<TComponent9>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
+                        OnUpdate(new(entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
                     }
                 }
             }

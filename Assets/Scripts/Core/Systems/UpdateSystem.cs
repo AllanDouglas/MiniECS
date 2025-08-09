@@ -9,7 +9,6 @@ namespace MiniECS
 
         public UpdateSystem(ECSManager eCSManager)
         {
-            
             ECSManager = eCSManager;
             _componentID = eCSManager.ComponentsManager.GetComponentID<TComponent>();
             _archetype = new(_componentID);
@@ -17,7 +16,7 @@ namespace MiniECS
 
         public bool Enabled { get; set; } = true;
 
-        public void Update(in FrameTime time)
+        public void Update(in FrameTime frameTime)
         {
             if (Enabled)
             {
@@ -31,13 +30,13 @@ namespace MiniECS
                     if (entityArchetype.Contains(_archetype))
                     {
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
-                        OnUpdate(new(ECSManager, entity, time.deltaTime), ref component);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1> : IUpdateSystem
@@ -52,7 +51,7 @@ namespace MiniECS
 
         public UpdateSystem(ECSManager ecsManager)
         {
-            
+
             ECSManager = ecsManager;
             _componentID = ECSManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ECSManager.ComponentsManager.GetComponentID<TComponent1>();
@@ -62,7 +61,7 @@ namespace MiniECS
 
         public bool Enabled { get; set; } = true;
 
-        public void Update(in FrameTime time)
+        public void Update(in FrameTime frameTime)
         {
             if (Enabled)
             {
@@ -77,13 +76,13 @@ namespace MiniECS
                     {
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
-                        OnUpdate(new(ECSManager, entity, time.deltaTime), ref component, ref component1);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2> : IUpdateSystem
@@ -99,7 +98,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -107,7 +106,7 @@ namespace MiniECS
         }
 
         public bool Enabled { get; set; } = true;
-        public void Update(in FrameTime time)
+        public void Update(in FrameTime frameTime)
         {
             if (Enabled)
             {
@@ -123,13 +122,13 @@ namespace MiniECS
                         ref TComponent component = ref ECSManager.ComponentsManager.GetComponentPool(_componentID).Get<TComponent>(in entity);
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
-                        OnUpdate(new(ECSManager, entity, time.deltaTime), ref component, ref component1, ref component2);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3> : IUpdateSystem
@@ -146,7 +145,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ECSManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ECSManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ECSManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -157,7 +156,7 @@ namespace MiniECS
 
         public bool Enabled { get; set; } = true;
 
-        public void Update(in FrameTime time)
+        public void Update(in FrameTime frameTime)
         {
             if (Enabled)
             {
@@ -174,13 +173,13 @@ namespace MiniECS
                         ref TComponent1 component1 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID1).Get<TComponent1>(in entity);
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
-                        OnUpdate(new(ECSManager, entity, time.deltaTime), ref component, ref component1, ref component2, ref component3);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4> : IUpdateSystem
@@ -198,7 +197,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -228,13 +227,13 @@ namespace MiniECS
                         ref TComponent2 component2 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID2).Get<TComponent2>(in entity);
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5> : IUpdateSystem
@@ -253,7 +252,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -285,13 +284,13 @@ namespace MiniECS
                         ref TComponent3 component3 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID3).Get<TComponent3>(in entity);
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6>
@@ -312,7 +311,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -346,13 +345,13 @@ namespace MiniECS
                         ref TComponent4 component4 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID4).Get<TComponent4>(in entity);
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7>
@@ -374,7 +373,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -410,13 +409,13 @@ namespace MiniECS
                         ref TComponent5 component5 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID5).Get<TComponent5>(in entity);
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8>
@@ -439,7 +438,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -477,13 +476,13 @@ namespace MiniECS
                         ref TComponent6 component6 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID6).Get<TComponent6>(in entity);
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
                         ref TComponent8 component8 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7, ref TComponent8 component8);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7, ref TComponent8 component8);
     }
 
     public abstract class UpdateSystem<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9>
@@ -507,7 +506,7 @@ namespace MiniECS
         public UpdateSystem(ECSManager ecsManager)
         {
             ECSManager = ecsManager;
-            
+
             _componentID = ecsManager.ComponentsManager.GetComponentID<TComponent>();
             _componentID1 = ecsManager.ComponentsManager.GetComponentID<TComponent1>();
             _componentID2 = ecsManager.ComponentsManager.GetComponentID<TComponent2>();
@@ -552,12 +551,12 @@ namespace MiniECS
                         ref TComponent7 component7 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID7).Get<TComponent7>(in entity);
                         ref TComponent8 component8 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID8).Get<TComponent8>(in entity);
                         ref TComponent9 component9 = ref ECSManager.ComponentsManager.GetComponentPool(_componentID9).Get<TComponent9>(in entity);
-                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
+                        OnUpdate(new(ECSManager, entity, frameTime.deltaTime, frameTime.time), ref component, ref component1, ref component2, ref component3, ref component4, ref component5, ref component6, ref component7, ref component8, ref component9);
                     }
                 }
             }
         }
 
-        protected abstract void OnUpdate(FilterContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7, ref TComponent8 component8, ref TComponent9 component9);
+        protected abstract void OnUpdate(FrameContext context, ref TComponent component, ref TComponent1 component1, ref TComponent2 component2, ref TComponent3 component3, ref TComponent4 component4, ref TComponent5 component5, ref TComponent6 component6, ref TComponent7 component7, ref TComponent8 component8, ref TComponent9 component9);
     }
 }

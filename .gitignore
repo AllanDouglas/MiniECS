@@ -50,6 +50,8 @@ unitycloudbuild.log
 # Local environment
 .env
 .env.*
+Source Generators/bin.meta
+Source Generators/bin/
 Source Generators/obj.meta
 Source Generators.sln.meta
 ./obj

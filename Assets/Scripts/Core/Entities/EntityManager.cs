@@ -6,7 +6,7 @@ namespace MiniECS
     public sealed class EntityManager
     {
         private readonly Entity[] _entities;
-        private readonly EntityController[] _entityControllers;
+        private readonly EntityPrototypeController[] _entityControllers;
         private readonly EntityAllocator _entityAllocator;
         private readonly int[] _activeEntities;
         private int _entityCount;
@@ -16,17 +16,17 @@ namespace MiniECS
         {
             _entities = new Entity[entityBufferSize];
             _entityAllocator = new EntityAllocator(entityBufferSize);
-            _entityControllers = new EntityController[entityBufferSize];
+            _entityControllers = new EntityPrototypeController[entityBufferSize];
             _activeEntities = new int[entityBufferSize];
         }
 
         public int EntityCount { get => _entityCount; private set => _entityCount = value; }
         public ReadOnlySpan<Entity> Entities => new(_entities);
         public ReadOnlySpan<int> ActiveEntitiesIndices => new(_activeEntities, 0, _activeEntitiesCount);
-        public ReadOnlySpan<EntityController> EntityControllers => new(_entityControllers);
+        public ReadOnlySpan<EntityPrototypeController> EntityControllers => new(_entityControllers);
         public EntityAllocator EntityAllocator => _entityAllocator;
 
-        public ref Entity AddEntityController(EntityController entityController)
+        public ref Entity AddEntityController(EntityPrototypeController entityController)
         {
             Entity entity = _entityAllocator.Allocate();
             _entities[entity.id] = entity;
@@ -56,6 +56,6 @@ namespace MiniECS
             _activeEntitiesCount++;
         }
 
-        public EntityController GetEntityController(in Entity target) => _entityControllers[target.id];
+        public EntityPrototypeController GetEntityController(in Entity target) => _entityControllers[target.id];
     }
 }

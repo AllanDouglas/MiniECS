@@ -5,26 +5,25 @@ using UnityEditor;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Scripting.APIUpdating;
 
 namespace MiniECS
 {
 
-    public sealed class EntityController : MiniECSBehaviour
+    [MovedFrom(true, sourceClassName: "ECSController")]
+    public sealed class EntityPrototypeController : MiniECSBehaviour
 #if UNITY_EDITOR
     , ISerializationCallbackReceiver
 #endif
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
-        [SerializeField, ReadOnly] private EntityController[] _children;
+        [SerializeField, ReadOnly] private EntityPrototypeController[] _children;
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
         public ECSManager ECSManager { get; set; }
-        public EntityController[] Children { get => _children; }
+        public EntityPrototypeController[] Children { get => _children; }
 
-        public void Recycle()
-        {
-            ECSManager?.Recycle(Entity);
-        }
+        public void Recycle() => ECSManager?.Recycle(Entity);
 
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
@@ -49,7 +48,16 @@ namespace MiniECS
 
         void OnValidate()
         {
-            _children = GetComponentsInChildren<EntityController>().Where(e => e != this).ToArray();
+            _children = GetComponentsInChildren<EntityPrototypeController>().Where(e => e != this).ToArray();
+
+            if (Components != null)
+            {
+                foreach (var item in Components)
+                {
+                    if (item is IComponentPrototypeEditor prototypeEditor)
+                        prototypeEditor?.OnValidate(this);
+                }
+            }
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize() { }
@@ -60,7 +68,6 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
-
 
             if (Components != null)
             {
@@ -77,7 +84,8 @@ namespace MiniECS
             {
                 foreach (var item in Components)
                 {
-                    item?.OnDrawGizmos(this);
+                    if (item is IComponentPrototypeEditor prototypeEditor)
+                        prototypeEditor?.OnDrawGizmos(this);
                 }
             }
         }

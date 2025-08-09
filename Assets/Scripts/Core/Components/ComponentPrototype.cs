@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MiniECS
 {
     [Serializable]
-    public abstract class ComponentPrototype<TComponent> : IComponentPrototype
+    public abstract class ComponentPrototype<TComponent> : IComponentPrototype, IComponentPrototypeEditor
         where TComponent : struct, IComponent
     {
         [SerializeField] protected TComponent _component;
@@ -30,8 +30,9 @@ namespace MiniECS
             return componentsPool.GetComponentID<TComponent>();
         }
 
-        public virtual void OnDrawGizmos(EntityController entityController) { }
-        public virtual void Bind(EntityController entityController) { }
-        public virtual void OnAdd(EntityController entityController) { }
+        public virtual void OnDrawGizmos(EntityPrototypeController entityController) { }
+        public virtual void Bind(EntityPrototypeController entityController) { }
+        public virtual void OnAdd(EntityPrototypeController entityController) { }
+        public virtual void OnValidate(EntityPrototypeController entityController) { }
     }
 }

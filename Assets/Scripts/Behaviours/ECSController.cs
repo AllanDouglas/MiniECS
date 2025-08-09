@@ -12,7 +12,7 @@ namespace MiniECS
         [SerializeField] private int _entityBufferSize = 100;
         [SerializeField] private int _componentBufferSize = 10;
 
-        [SerializeField] private EntityController[] _entities;
+        [SerializeField] private EntityPrototypeController[] _entities;
 
         public ECSManager ECSManager => GameLoopController.Instance.ecsManager;
 
@@ -56,14 +56,14 @@ namespace MiniECS
         }
 
 
-        public void RegisterEntityController(EntityController entityController)
+        public void RegisterEntityController(EntityPrototypeController entityController)
         {
             GameLoopController.Instance.RegisterEntityController(entityController);
         }
 
         void OnValidate()
         {
-            _entities = FindObjectsByType<EntityController>(FindObjectsSortMode.InstanceID);
+            _entities = FindObjectsByType<EntityPrototypeController>(FindObjectsSortMode.InstanceID);
         }
 
         private sealed class GameLoopController : MiniECSBehaviour
@@ -85,7 +85,7 @@ namespace MiniECS
             public ECSManager ecsManager;
             public IGameMode gameMode;
 
-            public void RegisterEntityController(EntityController entityController)
+            public void RegisterEntityController(EntityPrototypeController entityController)
             {
                 if (gameMode != null)
                 {

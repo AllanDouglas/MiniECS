@@ -14,11 +14,11 @@ namespace MiniECS
     {
         private static List<Type> s_Types;
         private VisualElement _root;
-        private EntityController _controller;
+        private EntityPrototypeController _controller;
 
         public override VisualElement CreateInspectorGUI()
         {
-            _controller = (EntityController)target;
+            _controller = (EntityPrototypeController)target;
             _root = new VisualElement();
 
             DrawComponentList();

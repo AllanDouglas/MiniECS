@@ -73,6 +73,37 @@ namespace MiniECS
             return instance;
         }
 
+        public EntityBehaviour GetPooledEntityInstance(EntityBehaviour prefab)
+        {
+            EntityPrototypeController instance = _Pool.Get(prefab.EntityController);
+            if (instance.Entity == Entity.Null)
+            {
+                AddEntityController(instance);
+            }
+            else
+            {
+                EntityManager.Active(instance.Entity);
+            }
+
+            return instance.GetComponent<EntityBehaviour>();
+        }
+
+        public T GetPooledEntityInstance<T>(T prefab)
+            where T : EntityBehaviour
+        {
+            EntityPrototypeController instance = _Pool.Get(prefab.EntityController);
+            if (instance.Entity == Entity.Null)
+            {
+                AddEntityController(instance);
+            }
+            else
+            {
+                EntityManager.Active(instance.Entity);
+            }
+
+            return instance.GetComponent<T>();
+        }
+
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab,
             Transform parent)
         {

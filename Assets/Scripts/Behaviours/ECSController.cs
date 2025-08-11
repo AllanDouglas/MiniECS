@@ -87,10 +87,7 @@ namespace MiniECS
 
             public void RegisterEntityController(EntityPrototypeController entityController)
             {
-                if (gameMode != null)
-                {
-                    ecsManager.AddEntityController(entityController);
-                }
+                ecsManager.AddEntityController(entityController);
             }
 
             public void Init(int entityBufferSize, int componentsBufferSize)

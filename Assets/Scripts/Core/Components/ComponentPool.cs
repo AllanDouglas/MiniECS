@@ -9,13 +9,12 @@ namespace MiniECS
     {
         private T _invalidComponent;
 
-        private readonly T[] _components;
+        private T[] _components;
         private readonly uint[] _dense;
         private readonly int[] _sparse;
         public int Count { get; private set; }
 
         public Type ComponentType => typeof(T);
-
         public ComponentPool(int entityCapacity, int componentCapacity = -1)
         {
             if (componentCapacity == -1)
@@ -123,6 +122,18 @@ namespace MiniECS
         }
 
         public void Remove(in Entity entity) => Remove(entity.id);
+
+        public ReadOnlySpan<TComponent> GetReadOnlyComponents<TComponent>()
+        {
+            return UnsafeUtility.As<T[], TComponent[]>(ref _components).AsSpan(0, Count);
+        }
+
+        public Entity GetEntity(int index) => new(_dense[index]);
+
+        public Span<TComponent> GetComponents<TComponent>()
+        {
+            return UnsafeUtility.As<T[], TComponent[]>(ref _components).AsSpan(0, Count);
+        }
 
         private struct EmptyComponent : IComponent { }
 

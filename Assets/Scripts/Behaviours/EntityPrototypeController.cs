@@ -11,6 +11,7 @@ namespace MiniECS
 {
 
     [MovedFrom(true, sourceClassName: "ECSController")]
+    [DisallowMultipleComponent]
     public sealed class EntityPrototypeController : MiniECSBehaviour
 #if UNITY_EDITOR
     , ISerializationCallbackReceiver

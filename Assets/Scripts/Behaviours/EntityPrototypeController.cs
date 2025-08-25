@@ -26,6 +26,12 @@ namespace MiniECS
 
         public void Recycle() => ECSManager?.Recycle(Entity);
 
+        public void Deactivate(bool keepGameObjectActive = false)
+        {
+            ECSManager?.DeactivateEntity(Entity);
+            gameObject.SetActive(keepGameObjectActive);
+        }
+
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
             return ECSManager.ComponentsManager.Get<TComponent>(Entity);
@@ -90,6 +96,7 @@ namespace MiniECS
                 }
             }
         }
+
 
 #endif
 

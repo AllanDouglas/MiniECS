@@ -48,12 +48,31 @@ namespace MiniECS
             _activeEntitiesCount--;
         }
 
-        public void Deactivate(in Entity entity) => Deactivate(Array.IndexOf(_activeEntities, (int)entity.id));
+        public void Deactivate(in Entity entity)
+        {
+            if (IsActive(entity))
+            {
+                Deactivate(Array.IndexOf(_activeEntities, (int)entity.id));
+            }
+        }
 
         public void Active(in Entity entity)
         {
             _activeEntities[_activeEntitiesCount] = (int)entity.id;
             _activeEntitiesCount++;
+        }
+
+        public bool IsActive(in Entity entity)
+        {
+            for (int i = 0; i < _activeEntitiesCount; i++)
+            {
+                if (_activeEntities[i] == entity.id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public EntityPrototypeController GetEntityController(in Entity target) => _entityControllers[target.id];

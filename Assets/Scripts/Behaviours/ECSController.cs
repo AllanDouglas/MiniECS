@@ -75,7 +75,11 @@ namespace MiniECS
                 {
                     if (_instance == null)
                     {
-                        var gameManager = new GameObject(nameof(GameLoopController));
+                        GameObject gameManager = new(nameof(GameLoopController))
+                        {
+                            hideFlags = HideFlags.HideInInspector | HideFlags.HideAndDontSave
+                        };
+                        
                         _instance = gameManager.AddComponent<GameLoopController>();
                         _instance.enabled = false;
                     }

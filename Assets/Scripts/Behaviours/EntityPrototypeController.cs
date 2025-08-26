@@ -43,7 +43,7 @@ namespace MiniECS
 
             if (ECSManager is null)
             {
-                return ref UnsafeUtility.As<IComponent, TComponent>(ref ComponentsManager.Trash);
+                return ref ComponentsManager.GetInvalidRef<TComponent>();
             }
 
             ref var component = ref ECSManager.ComponentsManager.TryGet<TComponent>(Entity, out hasComponent);

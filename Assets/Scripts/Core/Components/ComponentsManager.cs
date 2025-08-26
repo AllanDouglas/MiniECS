@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace MiniECS
 {
     public sealed class ComponentsManager
     {
 
+        private static TrashComponent _trashComponent = default;
+
         public static IComponent Trash = new TrashComponent();
+        public static ref T GetInvalidRef<T>() where T : struct, IComponent
+            => ref UnsafeUtility.As<TrashComponent, T>(ref _trashComponent);
 
         private int _componentID = 0;
         private readonly Dictionary<Type, (int id, IComponentPool pool)> _componentCache;
@@ -124,7 +129,7 @@ namespace MiniECS
             return false;
         }
 
-        private struct TrashComponent : IComponent { }
+        public struct TrashComponent : IComponent { }
 
     }
 }

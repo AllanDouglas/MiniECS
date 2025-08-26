@@ -28,6 +28,13 @@ namespace MiniECS
         public static ref TComponent TryGetComponent<TComponent>(this ECSManager ecsManager, in Entity entity, out bool hasComponent)
             where TComponent : struct, IComponent
         {
+
+            if (!ecsManager.ArchetypeManager.Get(entity).Contains(ecsManager.GetComponentID<TComponent>()))
+            {
+                hasComponent = false;
+                return ref ComponentsManager.GetInvalidRef<TComponent>();
+            }
+
             return ref ecsManager.ComponentsManager.TryGet<TComponent>(entity, out hasComponent);
         }
 

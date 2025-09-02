@@ -24,11 +24,11 @@ namespace MiniECS
             set
             {
                 _enabled = value;
+                GameLoopController.Instance.enabled = _enabled;
                 if (_enabled)
                 {
-                    GameLoopController.Instance.gameMode ??= _gameMode;
+                    GameLoopController.Instance.GameMode ??= _gameMode;
                 }
-                GameLoopController.Instance.enabled = _enabled;
             }
         }
 
@@ -38,13 +38,12 @@ namespace MiniECS
             set
             {
                 _gameMode = value;
-                GameLoopController.Instance.gameMode = _gameMode;
+                GameLoopController.Instance.GameMode = _gameMode;
             }
         }
 
         void Awake()
         {
-            GameLoopController.Instance.gameMode = _gameMode;
             GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
 
             for (int i = 0; i < _entities.Length; i++)
@@ -54,7 +53,6 @@ namespace MiniECS
 
             GameLoopController.Instance.enabled = _enabled;
         }
-
 
         public void RegisterEntityController(EntityPrototypeController entityController)
         {
@@ -77,17 +75,32 @@ namespace MiniECS
                     {
                         GameObject gameManager = new(nameof(GameLoopController))
                         {
-                            hideFlags = HideFlags.HideInInspector | HideFlags.HideAndDontSave
+                            hideFlags = HideFlags.HideInInspector
                         };
-                        
+
                         _instance = gameManager.AddComponent<GameLoopController>();
                         _instance.enabled = false;
                     }
                     return _instance;
                 }
             }
+
+            public IGameMode GameMode
+            {
+                get => _gameMode;
+                set
+                {
+                    _gameMode = value;
+
+                    if (ecsManager != null && enabled)
+                    {
+                        _gameMode.Start(ecsManager);
+                    }
+                }
+            }
+
             public ECSManager ecsManager;
-            public IGameMode gameMode;
+            private IGameMode _gameMode;
 
             public void RegisterEntityController(EntityPrototypeController entityController)
             {
@@ -101,32 +114,27 @@ namespace MiniECS
 
             void OnEnable()
             {
-                gameMode?.OnEnable(ecsManager);
+                GameMode?.OnEnable(ecsManager);
             }
 
             void OnDisable()
             {
-                gameMode?.OnDisable(ecsManager);
-            }
-
-            void Start()
-            {
-                gameMode?.Start(ecsManager);
+                GameMode?.OnDisable(ecsManager);
             }
 
             void Update()
             {
-                gameMode.Update(ecsManager);
+                GameMode.Update(ecsManager);
             }
 
             void FixedUpdate()
             {
-                gameMode.FixedUpdate(ecsManager);
+                GameMode.FixedUpdate(ecsManager);
             }
 
             void LateUpdate()
             {
-                gameMode.LateUpdate(ecsManager);
+                GameMode.LateUpdate(ecsManager);
                 EventBus.FlushAll();
                 MessageBus.FlushAll();
             }

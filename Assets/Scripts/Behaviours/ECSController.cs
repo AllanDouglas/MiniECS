@@ -122,6 +122,11 @@ namespace MiniECS
                 GameMode?.OnDisable(ecsManager);
             }
 
+            void OnDestroy()
+            {
+                GameMode?.OnDisable(ecsManager);
+            }
+
             void Update()
             {
                 GameMode.Update(ecsManager);

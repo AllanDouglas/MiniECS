@@ -73,5 +73,12 @@ namespace MiniECS
             return false;
         }
 
+        public void Clear()
+        {
+            _systemsCount = 0;
+            _fixedTimeSystemsCount = 0;
+            Array.Clear(_systems, 0, _systems.Length);
+            Array.Clear(_fixedTimeSystems, 0, _fixedTimeSystems.Length);
+        }
     }
 }

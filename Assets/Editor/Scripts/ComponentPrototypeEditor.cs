@@ -13,6 +13,14 @@ namespace MiniECS
         {
             var root = new VisualElement();
             root.Add(new PropertyField(property, $"{ObjectNames.NicifyVariableName(property.managedReferenceValue.GetType().Name)}"));
+
+            if (property.boxedValue is IComponentPrototypeEditor prototype
+             && property.serializedObject.targetObject is EntityPrototypeController entityPrototype)
+            {
+                prototype.OnValidate(entityPrototype);
+                property.serializedObject.ApplyModifiedProperties();
+            }
+
             return root;
         }
     }

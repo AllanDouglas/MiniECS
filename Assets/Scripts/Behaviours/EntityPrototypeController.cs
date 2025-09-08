@@ -37,8 +37,49 @@ namespace MiniECS
             return ECSManager.ComponentsManager.Get<TComponent>(Entity);
         }
 
+        public bool HasComponent<TComponent>()
+            where TComponent : struct, IComponent
+        {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                for (int i = 0; i < _components.Length; i++)
+                {
+                    if (_components[i].IsFromComponentType<TComponent>())
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+#endif
+
+            ref var component = ref ECSManager.ComponentsManager.TryGet<TComponent>(Entity, out bool hasComponent);
+
+            return hasComponent;
+
+        }
+
         public ref TComponent TryGetECSComponent<TComponent>(out bool hasComponent) where TComponent : struct, IComponent
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                for (int i = 0; i < _components.Length; i++)
+                {
+                    if (_components[i].IsFromComponentType<TComponent>())
+                    {
+                        hasComponent = true;
+                        return ref _components[i].GetComponent<TComponent>();
+                    }
+                }
+
+                hasComponent = false;
+                return ref ComponentsManager.GetInvalidRef<TComponent>();
+            }
+#endif
+
+
             hasComponent = false;
 
             if (ECSManager is null)
@@ -80,7 +121,7 @@ namespace MiniECS
             {
                 foreach (var item in Components)
                 {
-                    item?.Bind(this);
+                    (item as IComponentPrototypeEditor)?.OnValidate(this);
                 }
             }
         }

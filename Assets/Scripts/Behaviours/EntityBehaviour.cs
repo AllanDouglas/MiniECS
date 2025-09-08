@@ -6,6 +6,7 @@ namespace MiniECS
     public abstract class EntityBehaviour : MiniECSBehaviour
     {
         [SerializeField] private EntityPrototypeController _entityController;
+        public ECSManager ECSManager => _entityController != null ? _entityController.ECSManager : null;
         public EntityPrototypeController EntityController { get => _entityController; set => _entityController = value; }
 
         public TComponent GetECSComponent<TComponent>()

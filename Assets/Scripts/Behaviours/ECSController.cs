@@ -25,10 +25,7 @@ namespace MiniECS
             {
                 _enabled = value;
                 GameLoopController.Instance.enabled = _enabled;
-                if (_enabled)
-                {
-                    GameLoopController.Instance.GameMode ??= _gameMode;
-                }
+
             }
         }
 
@@ -51,7 +48,8 @@ namespace MiniECS
                 RegisterEntityController(_entities[i]);
             }
 
-            GameLoopController.Instance.enabled = _enabled;
+            Enabled = _enabled;
+            GameMode = _gameMode;
         }
 
         public void RegisterEntityController(EntityPrototypeController entityController)
@@ -94,7 +92,8 @@ namespace MiniECS
 
                     if (ecsManager != null && enabled)
                     {
-                        _gameMode.Start(ecsManager);
+                        _gameMode?.Start(ecsManager);
+                        _gameMode?.OnEnable(ecsManager);
                     }
                 }
             }

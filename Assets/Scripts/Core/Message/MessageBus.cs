@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Unity.Collections.LowLevel.Unsafe;
+using UnityEditor;
 using UnityEngine;
 
 namespace MiniECS
@@ -102,6 +105,8 @@ namespace MiniECS
 
         private sealed class MessageStorage<TMessage> : IFlushable where TMessage : struct, IMessage
         {
+
+
             private static MessageStorage<TMessage> _instance;
             public static MessageStorage<TMessage> Instance
             {
@@ -117,11 +122,19 @@ namespace MiniECS
                 }
             }
 
-            private readonly Dictionary<GameObject, List<Action<TMessage>>> _listeners = new();
+            // private readonly Dictionary<GameObject, List<Action<TMessage>>> _listeners = new();
+            private readonly Dictionary<GameObject, ActionBuffer<TMessage>> _listeners = new();
             private readonly Queue<(GameObject target, TMessage message)> _messageQueue = new();
 
             public void Flush()
             {
+#if UNITY_EDITOR
+                if (Thread.CurrentThread.ManagedThreadId != MiniECSBehaviour.MainThreadIndex)
+                {
+                    throw new Exception("MessageBus.Flush() can only be called from the main thread.");
+                }
+#endif
+
                 while (_messageQueue.Count > 0)
                 {
                     var (target, message) = _messageQueue.Dequeue();
@@ -142,12 +155,27 @@ namespace MiniECS
                     return;
                 }
 
-                _listeners.Add(listener, new() { action });
+                ActionBuffer<TMessage> buffer = new();
+                buffer.Add(action);
+
+                _listeners.Add(listener, buffer);
             }
 
             public void Unsubscribe(GameObject listener, Action<TMessage> action)
             {
                 if (_listeners.TryGetValue(listener, out var actions))
+                {
+                    if (actions.dispatching)
+                    {
+                        actions.lazyActions += () => LocalUnsubscribe(action, actions);
+                        return;
+                    }
+
+                    LocalUnsubscribe(action, actions);
+
+                }
+
+                static bool LocalUnsubscribe(Action<TMessage> action, ActionBuffer<TMessage> actions)
                 {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
@@ -155,9 +183,11 @@ namespace MiniECS
                         {
                             actions[i] = actions[^1];
                             actions.RemoveAt(actions.Count - 1);
-                            return;
+                            return false;
                         }
                     }
+
+                    return true;
                 }
             }
 
@@ -165,10 +195,40 @@ namespace MiniECS
             {
                 if (_listeners.TryGetValue(target, out var actions))
                 {
+                    if (actions.dispatching)
+                    {
+                        actions.lazyActions += () => LocalDispatch(in message, actions);
+                        return;
+                    }
+
+                    if (actions.Count <= 0)
+                    {
+                        return;
+                    }
+
+                    actions.dispatching = true;
+
+                    LocalDispatch(in message, actions);
+
+                    actions.dispatching = false;
+
+                    actions.lazyActions?.Invoke();
+                    actions.lazyActions = null;
+                }
+
+                static void LocalDispatch(in TMessage message, ActionBuffer<TMessage> actions)
+                {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
+                        if (actions.Count <= 0)
+                        {
+                            return;
+                        }
+
                         actions[i].Invoke(message);
                     }
+
+                    return;
                 }
             }
 
@@ -177,6 +237,30 @@ namespace MiniECS
                 _messageQueue.Clear();
                 _listeners.Clear();
             }
+
+            private class ActionBuffer<M> where M : struct, IMessage
+            {
+                public List<Action<M>> Actions;
+                public bool dispatching;
+                public Action lazyActions;
+                public int Count => Actions?.Count ?? 0;
+
+                public Action<M> this[int index]
+                {
+                    get => Actions[index];
+                    set => Actions[index] = value;
+                }
+
+                public void RemoveAt(int index) => Actions.RemoveAt(index);
+
+                internal void Add(Action<M> action)
+                {
+                    Actions ??= new List<Action<M>>();
+
+                    Actions.Add(action);
+                }
+            }
+
         }
 
     }

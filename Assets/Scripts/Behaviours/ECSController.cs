@@ -123,7 +123,7 @@ namespace MiniECS
 
             void OnDestroy()
             {
-                GameMode?.OnDisable(ecsManager);
+                GameMode?.OnDestroy(ecsManager);
             }
 
             void Update()
@@ -142,8 +142,6 @@ namespace MiniECS
                 EventBus.FlushAll();
                 MessageBus.FlushAll();
             }
-
-
         }
     }
 

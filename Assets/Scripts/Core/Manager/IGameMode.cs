@@ -5,6 +5,7 @@ namespace MiniECS
 
         public void OnEnable(ECSManager ecs);
         public void OnDisable(ECSManager ecs);
+        public void OnDestroy(ECSManager ecs);
         public void Start(ECSManager ecs);
         public void Update(ECSManager ecs);
         public void FixedUpdate(ECSManager ecs);

@@ -12,12 +12,17 @@ namespace MiniECS
         [SerializeField] protected bool _useThisCapacity;
         [SerializeField] protected int _poolCapacity = 4;
         public ref TComponent Component => ref _component;
-
+        public ComponentID GetComponentID() => ComponentIdHelper.GetID<TComponent>();
         public void AddComponentToEntity(in Entity entity, ComponentsManager pool)
         {
             pool.GetComponentPool<TComponent>().Add(entity, _component);
         }
 
+        public void AddComponentToEntity(Archetype archetype, in Entity entity, int capacity = 4)
+        {
+            archetype.Add(entity, _component, !_useThisCapacity ? capacity : _poolCapacity);
+        }
+        
         public ref T GetComponent<T>() => ref UnsafeUtility.As<TComponent, T>(ref _component);
         public bool IsFromComponentType<T>() => Component is T;
         public ComponentID AddToComponentPool(ComponentsManager componentsPool, int capacity = 4)
@@ -30,9 +35,11 @@ namespace MiniECS
             return componentsPool.GetComponentID<TComponent>();
         }
 
+
         public virtual void OnDrawGizmos(EntityPrototypeController entityController) { }
         public virtual void Bind(EntityPrototypeController entityController) { }
         public virtual void OnAdd(EntityPrototypeController entityController) { }
         public virtual void OnValidate(EntityPrototypeController entityController) { }
+
     }
 }

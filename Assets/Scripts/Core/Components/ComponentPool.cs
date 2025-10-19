@@ -11,7 +11,7 @@ namespace MiniECS
 
         private T[] _components;
         private readonly uint[] _dense;
-        private readonly int[] _sparse;
+        private readonly uint[] _sparse;
         public int Count { get; private set; }
 
         public Type ComponentType => typeof(T);
@@ -22,10 +22,22 @@ namespace MiniECS
                 componentCapacity = entityCapacity;
             }
 
-            _sparse = new int[entityCapacity];
+            _sparse = new uint[entityCapacity];
             _dense = new uint[componentCapacity];
             _components = new T[componentCapacity];
-            Array.Fill(_sparse, -1);
+            Array.Fill(_sparse, Entity.Null.id);
+        }
+
+        public ComponentPool(uint[] sparse, int componentCapacity = -1)
+        {
+            if (componentCapacity == -1)
+            {
+                componentCapacity = sparse.Length;
+            }
+
+            _sparse = sparse;
+            _dense = new uint[componentCapacity];
+            _components = new T[componentCapacity];
         }
 
 
@@ -42,7 +54,7 @@ namespace MiniECS
                 return;
             }
 
-            _sparse[entityId] = Count;
+            _sparse[entityId] = (uint)Count;
             _dense[Count] = entityId;
             _components[Count] = component;
             Count++;
@@ -86,7 +98,7 @@ namespace MiniECS
             }
 #endif
 
-            int index = _sparse[entityId];
+            int index = (int)_sparse[entityId];
 #if UNITY_EDITOR
             if (index < 0 || index >= Count || _dense[index] != entityId)
             {
@@ -99,13 +111,13 @@ namespace MiniECS
 
         public bool Has(uint entityId)
         {
-            int index = _sparse[entityId];
+            int index = (int)_sparse[entityId];
             return index >= 0 && index < Count && _dense[index] == entityId;
         }
 
         public void Remove(uint entityId)
         {
-            int index = _sparse[entityId];
+            int index = (int)_sparse[entityId];
             if (!Has(entityId)) return;
 
             int last = Count - 1;
@@ -114,10 +126,10 @@ namespace MiniECS
             // Swap current with last
             _components[index] = _components[last];
             _dense[index] = lastEntity;
-            _sparse[lastEntity] = index;
+            _sparse[lastEntity] = (uint)index;
 
             // Invalidate removed
-            _sparse[entityId] = -1;
+            _sparse[entityId] = Entity.Null.id;
             Count--;
         }
 

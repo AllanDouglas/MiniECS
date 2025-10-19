@@ -21,6 +21,8 @@ namespace MiniECS
         public readonly SystemsManager SystemsManager;
         public readonly EventBus EventBus;
         public readonly MessageBus MessageBus;
+        private readonly int _entityBufferSize;
+        private readonly int _componentsBufferSize;
         public readonly ArchetypeManager ArchetypeManager;
 
         public ECSManager(int entityBufferSize = 100,
@@ -34,18 +36,34 @@ namespace MiniECS
             ComponentsManager = new(componentsBufferSize, entityBufferSize);
             EventBus = eventBus ?? new();
             MessageBus = messageBus ?? new();
+            _entityBufferSize = entityBufferSize;
+            _componentsBufferSize = componentsBufferSize;
         }
 
         public void AddEntityController(EntityPrototypeController entityController)
         {
             Entity entity = EntityManager.AddEntityController(entityController);
-            foreach (var item in entityController.Components)
+            ComponentSet componentSet = default;
+            foreach (var component in entityController.Components)
             {
-                item.Bind(entityController);
+                component.Bind(entityController);
+                componentSet = componentSet.Plus(component.GetComponentID());
             }
-            ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
+
+            if (!ArchetypeManager.TryGetArchetype(new(componentSet), out Archetype archetype1))
+            {
+                archetype1 = ArchetypeManager.CreateArchetype(componentSet, _componentsBufferSize);
+            }
+
+            foreach (var component in entityController.Components)
+            {
+                component.AddComponentToEntity(archetype1, entity, _entityBufferSize);
+            }
+
             entityController.Entity = entity;
             entityController.ECSManager = this;
+
+            ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
             ArchetypeManager.Set(in entity, componentArchetype: archetype);
 
 #if UNITY_EDITOR

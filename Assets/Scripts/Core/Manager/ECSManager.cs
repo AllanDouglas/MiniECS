@@ -52,11 +52,12 @@ namespace MiniECS
 
             if (!ArchetypeManager.TryGetArchetype(new(componentSet), out Archetype archetype1))
             {
-                archetype1 = ArchetypeManager.CreateArchetype(componentSet, _componentsBufferSize);
+                archetype1 = ArchetypeManager.CreateArchetype(default, _componentsBufferSize);
             }
 
-            foreach (var component in entityController.Components)
+            for (int i = 0; i < entityController.Components.Length; i++)
             {
+                IComponentPrototype component = entityController.Components[i];
                 component.AddComponentToEntity(archetype1, entity, _entityBufferSize);
             }
 

@@ -41,8 +41,9 @@ namespace MiniECS
 
         void Awake()
         {
-            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
 
+            GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
+            
             for (int i = 0; i < _entities.Length; i++)
             {
                 RegisterEntityController(_entities[i]);

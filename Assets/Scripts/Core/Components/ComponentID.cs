@@ -2,7 +2,7 @@ namespace MiniECS
 {
     public readonly struct ComponentID
     {
-        public readonly uint value;
+        public readonly ulong value;
         
         public ComponentID(int value) => this.value = (uint)value;
         public ComponentID(uint value) => this.value = value;

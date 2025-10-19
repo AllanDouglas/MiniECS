@@ -64,15 +64,7 @@ namespace MiniECS
             return new(-1);
         }
 
-        public ComponentID GetComponentID<TComponent>() where TComponent : struct, IComponent
-        {
-            if (_componentCache.TryGetValue(typeof(TComponent), out var poolSet))
-            {
-                return new(poolSet.id);
-            }
-
-            return new(Add(new ComponentPool<TComponent>(_componentBufferSize)));
-        }
+        public ComponentID GetComponentID<TComponent>() where TComponent : struct, IComponent => ComponentIdHelper.GetID<TComponent>();
 
         public int Add(IComponentPool componentPool)
         {

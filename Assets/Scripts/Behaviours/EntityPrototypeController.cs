@@ -1,8 +1,6 @@
 #if UNITY_EDITOR
-using System;
 using UnityEditor;
 #endif
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Scripting.APIUpdating;
@@ -125,7 +123,6 @@ namespace MiniECS
                 }
             }
         }
-
         void OnDrawGizmosSelected()
         {
             if (Components != null)
@@ -137,8 +134,6 @@ namespace MiniECS
                 }
             }
         }
-
-
 #endif
 
     }

@@ -19,11 +19,11 @@ namespace MiniECS
                 return componentSet;
             }
 
-            var aValue = componentSet.id;
+            ulong aValue = componentSet.id;
             int offset = (BIT_OFFSET * componentSet.count);
-            var bValue = componentID.value << offset;
+            ulong bValue = componentID.value << offset;
 
-            var value = aValue | bValue;
+            ulong value = aValue | bValue;
 
             return new(value, componentSet.count + 1);
         }

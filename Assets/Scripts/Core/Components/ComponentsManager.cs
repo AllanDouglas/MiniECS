@@ -83,7 +83,7 @@ namespace MiniECS
         public IComponentPool GetComponentPool(ComponentID componentId)
         {
 #if UNITY_EDITOR
-            if (componentId.value < 0 || componentId.value >= _componentsPool.Length)
+            if (componentId.value < 0 || componentId.value >= (ulong)_componentsPool.Length)
             {
                 UnityEngine.Debug.LogError($"Trying to get a Component Pool out of range. {componentId}");
                 return null;

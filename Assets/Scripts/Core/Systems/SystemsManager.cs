@@ -53,15 +53,26 @@ namespace MiniECS
         {
             for (int i = 0; i < _systems.Length; i++)
             {
+                if (_systems[i] is null)
+                {
+                    continue;
+                }
+
                 if (typeof(TSYSTEM) == _systems[i].GetType())
                 {
                     system = (TSYSTEM)_systems[i];
+
                     return true;
                 }
             }
 
             for (int i = 0; i < _fixedTimeSystems.Length; i++)
             {
+                if (_fixedTimeSystems[i] is null)
+                {
+                    continue;
+                }
+
                 if (typeof(TSYSTEM) == _fixedTimeSystems[i].GetType())
                 {
                     system = (TSYSTEM)_fixedTimeSystems[i];

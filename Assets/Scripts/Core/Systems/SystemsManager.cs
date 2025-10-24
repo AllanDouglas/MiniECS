@@ -45,7 +45,7 @@ namespace MiniECS
         {
             Assert.IsNotNull(system, "system cant be null");
 
-            Register(system as IUpdateSystem);
+            Register(system as IUpdateSystem, runAtFixedUpdate);
             return system;
         }
 

@@ -32,7 +32,7 @@ namespace MiniECS
 
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
-            return ECSManager.ComponentsManager.Get<TComponent>(Entity);
+            return ECSManager.GetComponent<TComponent>(Entity);
         }
 
         public bool HasComponent<TComponent>()
@@ -52,7 +52,7 @@ namespace MiniECS
             }
 #endif
 
-            ref var component = ref ECSManager.ComponentsManager.TryGet<TComponent>(Entity, out bool hasComponent);
+            ref var component = ref ECSManager.TryGetComponent<TComponent>(Entity, out bool hasComponent);
 
             return hasComponent;
 
@@ -85,7 +85,7 @@ namespace MiniECS
                 return ref ComponentsManager.GetInvalidRef<TComponent>();
             }
 
-            ref var component = ref ECSManager.ComponentsManager.TryGet<TComponent>(Entity, out hasComponent);
+            ref var component = ref ECSManager.TryGetComponent<TComponent>(Entity, out hasComponent);
 
             return ref component;
         }

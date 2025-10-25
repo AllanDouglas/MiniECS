@@ -4,8 +4,8 @@ namespace MiniECS
 {
     public readonly struct ComponentArchetype : IEquatable<ComponentArchetype>
     {
-        public static readonly int MaxCapacity = 64;
 
+        public const int MAX_ID = 64;
         public readonly ulong value;
 
         public ComponentArchetype(int id) => value = 1u << id;
@@ -16,6 +16,8 @@ namespace MiniECS
         public ComponentArchetype(ComponentArchetype archetype) : this(archetype.value) { }
 
         public bool Contains(ComponentID componentID) => (value & (1u << (int)componentID.value)) != 0;
+        public bool Contains<TComponent>() where TComponent : struct, IComponent
+            => (value & (1u << (int)ComponentIdHelper.GetID<TComponent>().value)) != 0;
         public bool Contains(ComponentArchetype other) => (value & other.value) == other.value;
         public bool Equals(ComponentArchetype other) => value == other.value;
         public override bool Equals(object obj) => obj is ComponentArchetype other && value == other.value;

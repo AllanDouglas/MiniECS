@@ -43,16 +43,17 @@ namespace MiniECS
         public void AddEntityController(EntityPrototypeController entityController)
         {
             Entity entity = EntityManager.AddEntityController(entityController);
-            ComponentSet componentSet = default;
+
+            ComponentArchetype componentArchetype = default;
             foreach (var component in entityController.Components)
             {
                 component.Bind(entityController);
-                componentSet = componentSet.Plus(component.GetComponentID());
+                componentArchetype += component.GetComponentID();
             }
 
-            if (!ArchetypeManager.TryGetArchetype(new(componentSet), out Archetype archetype1))
+            if (!ArchetypeManager.TryGetArchetype(componentArchetype, out Archetype archetype1))
             {
-                archetype1 = ArchetypeManager.CreateArchetype(default, _componentsBufferSize);
+                archetype1 = ArchetypeManager.CreateArchetype(_componentsBufferSize);
             }
 
             for (int i = 0; i < entityController.Components.Length; i++)
@@ -76,7 +77,7 @@ namespace MiniECS
             where TComponent : struct, IComponent
         {
             ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
-            ArchetypeManager.Set(entity, ArchetypeManager.Get(in entity) - componentId);
+            ArchetypeManager.Set(entity, ArchetypeManager.GetId(in entity) - componentId);
         }
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab)
         {

@@ -14,8 +14,8 @@ namespace MiniECS
             _archetypes2 = new Archetype[_bufferSize];
         }
 
-        public ComponentArchetype Get(in Entity entity) => _archetypes[entity.id];
-        public Archetype Get2(in Entity entity)
+        public ComponentArchetype GetId(in Entity entity) => _archetypes[entity.id];
+        public Archetype Get(in Entity entity)
         {
             for (int i = 0; i < _archetypes.Length; i++)
             {
@@ -28,10 +28,9 @@ namespace MiniECS
             return null;
         }
 
-        public Archetype CreateArchetype(ComponentSet componentSet, int componentsBufferSize = -1)
+        public Archetype CreateArchetype(int componentsBufferSize = -1)
         {
-            Archetype archetype = new(componentSet,
-                (uint)_archetypes.Length,
+            Archetype archetype = new((uint)_archetypes.Length,
                 (uint)componentsBufferSize);
 
             _archetypes2[Count] = archetype;
@@ -41,13 +40,13 @@ namespace MiniECS
 
         public void Set(in Entity entity, ComponentArchetype componentArchetype) => _archetypes[entity.id] = componentArchetype;
 
-        public bool TryGetArchetype(ArchetypeId archetypeId, out Archetype archetype)
+        public bool TryGetArchetype(ComponentArchetype archetypeId, out Archetype archetype)
         {
             archetype = Query(archetypeId);
             return archetype != null;
         }
 
-        public Archetype Query(ArchetypeId archetypeId)
+        public Archetype Query(ComponentArchetype archetypeId)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -284,6 +283,123 @@ namespace MiniECS
             return result;
         }
 
+        public Archetype[] Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8>()
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+        {
+            int found = 0;
+            Archetype[] archetypes = ArrayPool<Archetype>.Shared.Rent(Count);
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+
+            var result = new Archetype[found];
+
+            Array.Copy(archetypes, result, found);
+            ArrayPool<Archetype>.Shared.Return(archetypes);
+            return result;
+        }
+
+        public Archetype[] Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9>()
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+            where TComponent9 : struct, IComponent
+        {
+            int found = 0;
+            Archetype[] archetypes = ArrayPool<Archetype>.Shared.Rent(Count);
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>()
+                    && _archetypes2[i].HasComponent<TComponent9>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+
+            var result = new Archetype[found];
+
+            Array.Copy(archetypes, result, found);
+            ArrayPool<Archetype>.Shared.Return(archetypes);
+            return result;
+        }
+
+        public Archetype[] Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10>()
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+            where TComponent9 : struct, IComponent
+            where TComponent10 : struct, IComponent
+        {
+            int found = 0;
+            Archetype[] archetypes = ArrayPool<Archetype>.Shared.Rent(Count);
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>()
+                    && _archetypes2[i].HasComponent<TComponent9>()
+                    && _archetypes2[i].HasComponent<TComponent10>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+
+            var result = new Archetype[found];
+
+            Array.Copy(archetypes, result, found);
+            ArrayPool<Archetype>.Shared.Return(archetypes);
+            return result;
+        }
+
         public int Query<TComponent>(in Archetype[] archetypes)
             where TComponent : struct, IComponent
         {
@@ -454,6 +570,105 @@ namespace MiniECS
                     && _archetypes2[i].HasComponent<TComponent5>()
                     && _archetypes2[i].HasComponent<TComponent6>()
                     && _archetypes2[i].HasComponent<TComponent7>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+            return found;
+        }
+
+        public int Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8>(in Archetype[] archetypes)
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+        {
+            int found = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+            return found;
+        }
+
+        public int Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9>(in Archetype[] archetypes)
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+            where TComponent9 : struct, IComponent
+        {
+            int found = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>()
+                    && _archetypes2[i].HasComponent<TComponent9>())
+                {
+                    archetypes[found] = _archetypes2[i];
+                    found++;
+                }
+            }
+            return found;
+        }
+
+        public int Query<TComponent, TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10>(in Archetype[] archetypes)
+            where TComponent : struct, IComponent
+            where TComponent1 : struct, IComponent
+            where TComponent2 : struct, IComponent
+            where TComponent3 : struct, IComponent
+            where TComponent4 : struct, IComponent
+            where TComponent5 : struct, IComponent
+            where TComponent6 : struct, IComponent
+            where TComponent7 : struct, IComponent
+            where TComponent8 : struct, IComponent
+            where TComponent9 : struct, IComponent
+            where TComponent10 : struct, IComponent
+        {
+            int found = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                if (_archetypes2[i].HasComponent<TComponent>()
+                    && _archetypes2[i].HasComponent<TComponent1>()
+                    && _archetypes2[i].HasComponent<TComponent2>()
+                    && _archetypes2[i].HasComponent<TComponent3>()
+                    && _archetypes2[i].HasComponent<TComponent4>()
+                    && _archetypes2[i].HasComponent<TComponent5>()
+                    && _archetypes2[i].HasComponent<TComponent6>()
+                    && _archetypes2[i].HasComponent<TComponent7>()
+                    && _archetypes2[i].HasComponent<TComponent8>()
+                    && _archetypes2[i].HasComponent<TComponent9>()
+                    && _archetypes2[i].HasComponent<TComponent10>())
                 {
                     archetypes[found] = _archetypes2[i];
                     found++;

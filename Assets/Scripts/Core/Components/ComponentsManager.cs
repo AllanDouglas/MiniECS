@@ -99,8 +99,17 @@ namespace MiniECS
             return TryGetComponentPool(typeof(TComponent), out componentPool);
         }
 
-        public ref TComponent TryGet<TComponent>(in Entity entity, out bool hasComponent) where TComponent : struct, IComponent =>
-             ref _componentCache[typeof(TComponent)].pool.TryGet<TComponent>(entity, out hasComponent);
+        public ref TComponent TryGet<TComponent>(in Entity entity, out bool hasComponent) where TComponent : struct, IComponent
+        {
+            if (_componentCache.TryGetValue(typeof(TComponent), out var componentPool))
+            {
+                return ref componentPool.pool.TryGet<TComponent>(entity, out hasComponent);
+            }
+
+            hasComponent = false;
+            return ref GetInvalidRef<TComponent>();
+
+        }
 
         public ref TComponent TryGet<TComponent>(ComponentID componentID, in Entity entity, out bool hasComponent) where TComponent : struct, IComponent =>
             ref _componentsPool[componentID.value].TryGet<TComponent>(entity, out hasComponent);

@@ -17,7 +17,7 @@ namespace MiniECS
         public ComponentArchetype GetId(in Entity entity) => _archetypes[entity.id];
         public Archetype Get(in Entity entity)
         {
-            for (int i = 0; i < _archetypes.Length; i++)
+            for (int i = 0; i < _archetypes2.Length; i++)
             {
                 if (_archetypes2[i].ContainsEntity(entity))
                 {

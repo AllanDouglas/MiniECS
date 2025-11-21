@@ -73,7 +73,7 @@ namespace MiniECS
                 }
 
                 hasComponent = false;
-                return ref ComponentsManager.GetInvalidRef<TComponent>();
+                return ref ECSManager.GetInvalidComponentRef<TComponent>();
             }
 #endif
 
@@ -82,7 +82,7 @@ namespace MiniECS
 
             if (ECSManager is null)
             {
-                return ref ComponentsManager.GetInvalidRef<TComponent>();
+                return ref ECSManager.GetInvalidComponentRef<TComponent>();
             }
 
             ref var component = ref ECSManager.TryGetComponent<TComponent>(Entity, out hasComponent);

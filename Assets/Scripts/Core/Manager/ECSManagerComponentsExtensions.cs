@@ -28,7 +28,7 @@ namespace MiniECS
             if (!ecsManager.ArchetypeManager.GetId(entity).Contains(ecsManager.GetComponentID<TComponent>()))
             {
                 hasComponent = false;
-                return ref ComponentsManager.GetInvalidRef<TComponent>();
+                return ref ECSManager.GetInvalidComponentRef<TComponent>();
             }
             hasComponent = true;
             return ref ecsManager.GetComponent<TComponent>(in entity);
@@ -41,7 +41,7 @@ namespace MiniECS
             if (!ecsManager.ArchetypeManager.GetId(entity).Contains(ecsManager.GetComponentID<TComponent>()))
             {
                 hasComponent = false;
-                return ref ComponentsManager.GetInvalidRef<TComponent>();
+                return ref ECSManager.GetInvalidComponentRef<TComponent>();
             }
             hasComponent = true;
             return ref ecsManager.GetComponent<TComponent>(componentID, in entity);

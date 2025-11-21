@@ -1,3 +1,4 @@
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,6 +6,11 @@ namespace MiniECS
 {
     public sealed class ECSManager
     {
+
+        private struct TrashComponent : IComponent { }
+        private static TrashComponent _trashComponent = default;
+        public static ref T GetInvalidComponentRef<T>() where T : struct, IComponent
+                    => ref UnsafeUtility.As<TrashComponent, T>(ref _trashComponent);
 
         private static readonly MultiPool<EntityPrototypeController> _Pool = new();
 
@@ -17,7 +23,6 @@ namespace MiniECS
         }
 
         public readonly EntityManager EntityManager;
-        public readonly ComponentsManager ComponentsManager;
         public readonly SystemsManager SystemsManager;
         public readonly EventBus EventBus;
         public readonly MessageBus MessageBus;
@@ -33,7 +38,6 @@ namespace MiniECS
             EntityManager = new(entityBufferSize);
             ArchetypeManager = new(entityBufferSize);
             SystemsManager = new(entityBufferSize);
-            ComponentsManager = new(componentsBufferSize, entityBufferSize);
             EventBus = eventBus ?? new();
             MessageBus = messageBus ?? new();
             _entityBufferSize = entityBufferSize;
@@ -51,34 +55,33 @@ namespace MiniECS
                 componentArchetype += component.GetComponentID();
             }
 
-            if (!ArchetypeManager.TryGetArchetype(componentArchetype, out Archetype archetype1))
+            if (!ArchetypeManager.TryGetArchetype(componentArchetype, out Archetype archetype))
             {
-                archetype1 = ArchetypeManager.CreateArchetype(_componentsBufferSize);
+                archetype = ArchetypeManager.CreateArchetype(_componentsBufferSize);
             }
 
             for (int i = 0; i < entityController.Components.Length; i++)
             {
                 IComponentPrototype component = entityController.Components[i];
-                component.AddComponentToEntity(archetype1, entity, _entityBufferSize);
+                component.AddComponentToEntity(archetype, entity, _entityBufferSize);
             }
 
             entityController.Entity = entity;
             entityController.ECSManager = this;
 
-            ComponentArchetype archetype = ComponentsManager.AddComponentPrototype(in entity, entityController.Components);
-            ArchetypeManager.Set(in entity, componentArchetype: archetype);
+            ArchetypeManager.Set(in entity, componentArchetype: archetype.Id);
 
 #if UNITY_EDITOR
             entityController.name = $"{entityController.name} - {entity}";
 #endif
         }
 
-        public void RemoveComponent<TComponent>(in Entity entity)
-            where TComponent : struct, IComponent
-        {
-            ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
-            ArchetypeManager.Set(entity, ArchetypeManager.GetId(in entity) - componentId);
-        }
+        // public void RemoveComponent<TComponent>(in Entity entity)
+        //     where TComponent : struct, IComponent
+        // {
+        //     ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
+        //     ArchetypeManager.Set(entity, ArchetypeManager.GetId(in entity) - componentId);
+        // }
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab)
         {
             EntityPrototypeController instance = _Pool.Get(prefab);

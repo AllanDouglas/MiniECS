@@ -8,18 +8,18 @@ namespace MiniECS
     {
         private interface IFlushable
         {
-            public void Flush();
+            public void Flush(ECSManager ecs);
             void Clear();
         }
 
         private readonly List<IFlushable> _flushers = new();
 
-        public void Subscribe<T>(Action<T> callback) where T : struct, IEvent
+        public void Subscribe<T>(Action<ECSManager, T> callback) where T : struct, IEvent
         {
             EventStorage<T>.GetInstance(_flushers).Subscribe(callback);
         }
 
-        public void Unsubscribe<T>(Action<T> callback) where T : struct, IEvent
+        public void Unsubscribe<T>(Action<ECSManager, T> callback) where T : struct, IEvent
         {
             EventStorage<T>.GetInstance(_flushers).Unsubscribe(callback);
         }
@@ -33,11 +33,11 @@ namespace MiniECS
             EventStorage<T>.GetInstance(_flushers).Dispatch(default);
         }
 
-        public void FlushAll()
+        public void FlushAll(ECSManager ecs)
         {
             for (int i = 0; i < _flushers.Count; i++)
             {
-                _flushers[i].Flush();
+                _flushers[i].Flush(ecs);
             }
         }
 
@@ -52,7 +52,7 @@ namespace MiniECS
         private sealed class EventStorage<T> : IFlushable where T : struct, IEvent
         {
             public List<T> queue = new();
-            public Action<T> listeners;
+            public Action<ECSManager, T> listeners;
 
             private static EventStorage<T> _instance;
             public static EventStorage<T> GetInstance(List<IFlushable> flushables)
@@ -65,16 +65,16 @@ namespace MiniECS
 
                 return _instance;
             }
-            public void Subscribe(Action<T> callback) => listeners += callback;
-            public void Unsubscribe(Action<T> callback) => listeners -= callback;
+            public void Subscribe(Action<ECSManager, T> callback) => listeners += callback;
+            public void Unsubscribe(Action<ECSManager, T> callback) => listeners -= callback;
             public void Dispatch(T evt) => queue.Add(evt);
-            public void Flush()
+            public void Flush(ECSManager ecs)
             {
                 if (listeners != null)
                 {
                     for (int i = 0; i < queue.Count; i++)
                     {
-                        listeners.Invoke(queue[i]);
+                        listeners.Invoke(ecs, queue[i]);
                     }
                 }
 

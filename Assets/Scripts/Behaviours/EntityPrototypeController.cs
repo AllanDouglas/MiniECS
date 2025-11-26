@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Scripting.APIUpdating;
+using System;
 
 namespace MiniECS
 {
@@ -17,10 +18,26 @@ namespace MiniECS
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
         [SerializeField, ReadOnly] private EntityPrototypeController[] _children;
+
+        private ECSManager _ecsManager;
+
         public IComponentPrototype[] Components { get => _components; set => _components = value; }
         public Entity Entity { get; set; } = Entity.Null;
-        public ECSManager ECSManager { get; set; }
+        public ECSManager ECSManager
+        {
+            get => _ecsManager;
+            set
+            {
+                if (_ecsManager is null)
+                {
+                    _ecsManager = value;
+                    OnJoined?.Invoke(_ecsManager, this, Entity);
+                }
+            }
+        }
         public EntityPrototypeController[] Children { get => _children; }
+
+        public event Action<ECSManager, EntityPrototypeController, Entity> OnJoined;
 
         public void Recycle() => ECSManager?.Recycle(Entity);
 

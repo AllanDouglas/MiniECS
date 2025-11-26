@@ -66,11 +66,11 @@ namespace MiniECS
                 component.AddComponentToEntity(archetype, entity, _entityBufferSize);
             }
 
-            entityController.Entity = entity;
-            entityController.ECSManager = this;
 
             ArchetypeManager.Set(in entity, componentArchetype: archetype.Id);
 
+            entityController.Entity = entity;
+            entityController.ECSManager = this;
 #if UNITY_EDITOR
             entityController.name = $"{entityController.name} - {entity}";
 #endif

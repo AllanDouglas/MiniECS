@@ -1,9 +1,27 @@
 using System;
 using System.Buffers;
-using UnityEngine;
 
 namespace MiniECS
 {
+    public abstract class UpdateSystem : IUpdateSystem
+    {
+        public readonly ECSManager ECSManager;
+
+        public UpdateSystem(ECSManager ecsManager)
+        {
+            ECSManager = ecsManager;
+        }
+
+        public bool Enabled { get; set; } = true;
+
+        public void Update(in FrameTime frameTime)
+        {
+            OnUpdate(new(Entity.Null, frameTime.deltaTime, frameTime.time));
+        }
+
+        protected abstract void OnUpdate(FrameContext frameContext);
+    }
+
     public abstract class UpdateSystem<TComponent> : IUpdateSystem
         where TComponent : struct, IComponent
     {

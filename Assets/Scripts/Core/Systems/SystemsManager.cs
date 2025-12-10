@@ -49,6 +49,14 @@ namespace MiniECS
             return system;
         }
 
+        public void SetEnabled<T>(bool enabled = true) where T : IUpdateSystem
+        {
+            if (TryGet<T>(out var system))
+            {
+                system.Enabled = enabled;
+            }
+        }
+
         public bool TryGet<TSYSTEM>(out TSYSTEM system) where TSYSTEM : IUpdateSystem
         {
             for (int i = 0; i < _systems.Length; i++)

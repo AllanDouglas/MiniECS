@@ -10,7 +10,7 @@ namespace MiniECS
         public virtual void OnDestroy(ECSManager ecs) { }
         public virtual void Update(ECSManager ecs)
         {
-            FrameTime frameTime = new(Time.fixedTime, Time.time);
+            FrameTime frameTime = new(Time.deltaTime, Time.time);
 
             for (int i = 0; i < ecs.SystemsManager.Systems.Length; i++)
             {
@@ -23,7 +23,7 @@ namespace MiniECS
 
         public virtual void FixedUpdate(ECSManager ecs)
         {
-            FrameTime frameTime = new(Time.fixedTime, Time.time);
+            FrameTime frameTime = new(Time.fixedDeltaTime, Time.time);
 
             for (int i = 0; i < ecs.SystemsManager.FixedTimeSystems.Length; i++)
             {

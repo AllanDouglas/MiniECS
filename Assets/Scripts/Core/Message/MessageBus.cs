@@ -103,6 +103,11 @@ namespace MiniECS
             }
         }
 
+        public void Subscribe<T>(object gaugeUpdateValueHandler)
+        {
+            throw new NotImplementedException();
+        }
+
         private sealed class MessageStorage<TMessage> : IFlushable where TMessage : struct, IMessage
         {
 

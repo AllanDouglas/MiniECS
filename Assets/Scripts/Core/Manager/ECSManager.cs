@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -166,5 +167,6 @@ namespace MiniECS
             EntityManager.Deactivate(entity);
         }
 
+        public EntityPrototypeController GetEntityController(Entity entity) => EntityManager.GetEntityController(in entity);
     }
 }

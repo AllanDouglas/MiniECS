@@ -25,27 +25,31 @@ namespace MiniECS.Editor
                 root.Add(propertyField);
             }
 
-            // Find all relative children of _events propertyField and register a FocusOutEvent
-            var eventsProperty = serializedObject.FindProperty("_messages");
-            if (eventsProperty != null)
-            {
-                foreach (var child in root.Children())
-                {
-                    child.RegisterCallback<FocusOutEvent>(evt =>
+            root.RegisterCallback<FocusOutEvent>(evt =>
                     {
                         (target as MessageSettingsSO).Generate();
                     });
+            // Find all relative children of _events propertyField and register a FocusOutEvent
+            // var eventsProperty = serializedObject.FindProperty("_messages");
+            // if (eventsProperty != null)
+            // {
+            //     foreach (var child in root.Children())
+            //     {
+            //         child.RegisterCallback<FocusOutEvent>(evt =>
+            //         {
+            //             (target as MessageSettingsSO).Generate();
+            //         });
 
-                    if (child.name == "_messages")
-                    {
-                        var property = child as PropertyField;
-                        property.RegisterValueChangeCallback(e =>
-                        {
-                            (target as MessageSettingsSO).Generate();
-                        });
-                    }
-                }
-            }
+            //         if (child.name == "_messages")
+            //         {
+            //             var property = child as PropertyField;
+            //             property.RegisterValueChangeCallback(e =>
+            //             {
+            //                 (target as MessageSettingsSO).Generate();
+            //             });
+            //         }
+            //     }
+            // }
             serializedObject.ApplyModifiedProperties();
             return root;
         }

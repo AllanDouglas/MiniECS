@@ -13,6 +13,14 @@ namespace MiniECS
         // [SerializeField, ReadOnly] MessageListenerController _parent;
         // [SerializeField, ReadOnly] MessageListenerController[] _children;
 
+        void Awake()
+        {
+            if (_entityTarget == null)
+            {
+                _entityTarget = GetComponentInParent<EntityPrototypeController>();
+            }
+        }
+
         void OnEnable()
         {
             // if (_parent == null)

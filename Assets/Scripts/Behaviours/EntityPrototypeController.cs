@@ -49,6 +49,21 @@ namespace MiniECS
 
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                for (int i = 0; i < _components.Length; i++)
+                {
+                    if (_components[i].IsFromComponentType<TComponent>())
+                    {
+                        return _components[i].GetComponent<TComponent>();
+                    }
+                }
+
+                return default;
+            }
+#endif
+
             return ECSManager.GetComponent<TComponent>(Entity);
         }
 

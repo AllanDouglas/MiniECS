@@ -47,6 +47,12 @@ namespace MiniECS
             gameObject.SetActive(keepGameObjectActive);
         }
 
+        public void Active(bool keepGameObjectInactive = false)
+        {
+            ECSManager?.ActiveEntity(Entity);
+            gameObject.SetActive(!keepGameObjectInactive);
+        }
+
         public TComponent GetECSComponent<TComponent>() where TComponent : struct, IComponent
         {
 #if UNITY_EDITOR

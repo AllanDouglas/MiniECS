@@ -73,6 +73,20 @@ namespace MiniECS
             return ECSManager.GetComponent<TComponent>(Entity);
         }
 
+        public bool TryGetECSComponentPrototype<TComponent>(out TComponent component) where TComponent : struct, IComponent
+        {
+            for (int i = 0; i < _components.Length; i++)
+            {
+                if (_components[i].IsFromComponentType<TComponent>())
+                {
+                    component = _components[i].GetComponent<TComponent>();
+                    return true;
+                }
+            }
+            component = default;
+            return false;
+        }
+
         public bool HasComponent<TComponent>()
             where TComponent : struct, IComponent
         {
@@ -114,8 +128,6 @@ namespace MiniECS
                 return ref ECSManager.GetInvalidComponentRef<TComponent>();
             }
 #endif
-
-
             hasComponent = false;
 
             if (ECSManager is null)
@@ -142,6 +154,8 @@ namespace MiniECS
                         prototypeEditor?.OnValidate(this);
                 }
             }
+
+
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize() { }
@@ -152,12 +166,15 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
-
-            if (Components != null)
+            
+            if (!Application.isPlaying)
             {
-                foreach (var item in Components)
+                if (Components != null)
                 {
-                    (item as IComponentPrototypeEditor)?.OnValidate(this);
+                    foreach (var item in Components)
+                    {
+                        (item as IComponentPrototypeEditor)?.OnValidate(this);
+                    }
                 }
             }
         }

@@ -13,19 +13,36 @@ namespace MiniECS
         [SerializeField] protected int _poolCapacity = 4;
         public ref TComponent Component => ref _component;
         public ComponentID GetComponentID() => ComponentIdHelper.GetID<TComponent>();
-        
+
         public void AddComponentToEntity(Archetype archetype, in Entity entity, int capacity = 4)
         {
             archetype.Add(entity, _component, !_useThisCapacity ? capacity : _poolCapacity);
         }
-        
+
         public ref T GetComponent<T>() => ref UnsafeUtility.As<TComponent, T>(ref _component);
         public bool IsFromComponentType<T>() => Component is T;
-     
+
         public virtual void OnDrawGizmos(EntityPrototypeController entityController) { }
         public virtual void Bind(EntityPrototypeController entityController) { }
         public virtual void OnAdd(EntityPrototypeController entityController) { }
-        public virtual void OnValidate(EntityPrototypeController entityController) { }
+        public virtual void OnValidate(EntityPrototypeController entityController)
+        {
+#if UNITY_EDITOR
+            if (Application.IsPlaying(entityController.gameObject))
+            {
+                if (entityController.TryGetECSComponentPrototype<TComponent>(out var componentProto))
+                {
+                    ref var componentRef = ref entityController.TryGetECSComponent<TComponent>(out bool hasComponent);
+                    
+                    if (hasComponent)
+                    {
+                        componentRef = componentProto;
+                    }
+                }
+            }
+#endif
+
+        }
 
     }
 }

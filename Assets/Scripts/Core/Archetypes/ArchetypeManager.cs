@@ -5,16 +5,26 @@ namespace MiniECS
 {
     public sealed class ArchetypeManager
     {
-        private readonly ComponentArchetype[] _archetypes;
         private readonly Archetype[] _archetypes2;
         public int Count { get; private set; }
         public ArchetypeManager(int _bufferSize)
         {
-            _archetypes = new ComponentArchetype[_bufferSize];
             _archetypes2 = new Archetype[_bufferSize];
         }
 
-        public ComponentArchetype GetId(in Entity entity) => _archetypes[entity.id];
+        public ComponentArchetype GetId(in Entity entity)
+        {
+            for (int i = 0; i < _archetypes2.Length; i++)
+            {
+                if (_archetypes2[i].ContainsEntity(entity))
+                {
+                    return _archetypes2[i].Id;
+                }
+            }
+
+            return default;
+        }
+
         public Archetype Get(in Entity entity)
         {
             for (int i = 0; i < _archetypes2.Length; i++)
@@ -30,7 +40,7 @@ namespace MiniECS
 
         public Archetype CreateArchetype(int componentsBufferSize = -1)
         {
-            Archetype archetype = new((uint)_archetypes.Length,
+            Archetype archetype = new((uint)_archetypes2.Length,
                 (uint)componentsBufferSize);
 
             _archetypes2[Count] = archetype;
@@ -38,7 +48,7 @@ namespace MiniECS
             return archetype;
         }
 
-        public void Set(in Entity entity, ComponentArchetype componentArchetype) => _archetypes[entity.id] = componentArchetype;
+        // public void Set(in Entity entity, ComponentArchetype componentArchetype) => _archetypes2[entity.id] = componentArchetype;
 
         public bool TryGetArchetype(ComponentArchetype archetypeId, out Archetype archetype)
         {

@@ -50,8 +50,9 @@ namespace MiniECS
             Entity entity = EntityManager.AddEntityController(entityController);
 
             ComponentArchetype componentArchetype = default;
-            foreach (var component in entityController.Components)
+            for (int i = 0; i < entityController.Components.Length; i++)
             {
+                IComponentPrototype component = entityController.Components[i];
                 component.Bind(entityController);
                 componentArchetype += component.GetComponentID();
             }
@@ -80,12 +81,13 @@ namespace MiniECS
         //     ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
         //     ArchetypeManager.Set(entity, ArchetypeManager.GetId(in entity) - componentId);
         // }
-        public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab)
+        public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab, Action<EntityPrototypeController> onCreate = null)
         {
             EntityPrototypeController instance = _Pool.Get(prefab);
             if (instance.Entity == Entity.Null)
             {
                 AddEntityController(instance);
+                onCreate?.Invoke(instance);
             }
             else
             {
@@ -94,12 +96,13 @@ namespace MiniECS
             return instance;
         }
 
-        public EntityBehaviour GetPooledEntityInstance(EntityBehaviour prefab)
+        public EntityBehaviour GetPooledEntityInstance(EntityBehaviour prefab, Action<EntityPrototypeController> onCreate = null)
         {
             EntityPrototypeController instance = _Pool.Get(prefab.EntityController);
             if (instance.Entity == Entity.Null)
             {
                 AddEntityController(instance);
+                onCreate?.Invoke(instance);
             }
             else
             {
@@ -126,9 +129,10 @@ namespace MiniECS
         }
 
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab,
-            Transform parent)
+            Transform parent, Action<EntityPrototypeController> onCreate = null
+            )
         {
-            EntityPrototypeController instance = GetPooledEntityInstance(prefab);
+            EntityPrototypeController instance = GetPooledEntityInstance(prefab, onCreate);
             instance.transform.SetParent(parent);
             return instance;
         }
@@ -136,9 +140,10 @@ namespace MiniECS
         public EntityPrototypeController GetPooledEntityInstance(
             EntityPrototypeController prefab,
             Vector3 position = default,
-            Quaternion rotation = default)
+            Quaternion rotation = default,
+            Action<EntityPrototypeController> onCreate = null)
         {
-            EntityPrototypeController instance = GetPooledEntityInstance(prefab);
+            EntityPrototypeController instance = GetPooledEntityInstance(prefab, onCreate);
             instance.transform.SetPositionAndRotation(position, rotation);
             return instance;
         }
@@ -147,9 +152,10 @@ namespace MiniECS
             EntityPrototypeController prefab,
             Transform parent,
             Vector3 position,
-            Quaternion rotation)
+            Quaternion rotation,
+            Action<EntityPrototypeController> onCreate = null)
         {
-            EntityPrototypeController instance = GetPooledEntityInstance(prefab);
+            EntityPrototypeController instance = GetPooledEntityInstance(prefab, onCreate);
             instance.transform.SetParent(parent);
             instance.transform.SetPositionAndRotation(position, rotation);
             return instance;

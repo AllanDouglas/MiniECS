@@ -1,4 +1,5 @@
-# MiniECS
+
+# MiniECS (WORK IN PROGRESS)
 
 MiniECS is a lightweight Entity Component System (ECS) framework designed for Unity projects. It aims to provide a simple, efficient, and flexible architecture for managing ECSManager entities and their behaviors.
 

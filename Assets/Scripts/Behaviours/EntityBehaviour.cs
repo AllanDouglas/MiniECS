@@ -4,6 +4,7 @@ using UnityEngine;
 namespace MiniECS
 {
     [RequireComponent(typeof(EntityPrototypeController))]
+    [DefaultExecutionOrder(-51)]
     public abstract class EntityBehaviour : MiniECSBehaviour
     {
         [SerializeField, ReadOnly] private EntityPrototypeController _entityController;

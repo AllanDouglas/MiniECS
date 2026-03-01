@@ -14,6 +14,7 @@ namespace MiniECS
 
         private readonly List<IFlushable> _flushers = new();
 
+
         public void Subscribe<T>(Action<ECSManager, T> callback) where T : struct, IEvent
         {
             EventStorage<T>.GetInstance(_flushers).Subscribe(callback);
@@ -85,6 +86,18 @@ namespace MiniECS
             {
                 listeners = null;
             }
+        }
+    }
+    
+    public static class EventBusExtension
+    {
+        public static void SubscribeEventHandler(this ECSManager ecs, IEventHandler eventHandler)
+        {
+            eventHandler.Subscribe(ecs);
+        }
+        public static void UnsubscribeEventHandler(this ECSManager ecs, IEventHandler eventHandler)
+        {
+            eventHandler.Unsubscribe(ecs);
         }
     }
 }

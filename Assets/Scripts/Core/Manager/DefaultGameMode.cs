@@ -6,6 +6,7 @@ namespace MiniECS
     {
         public virtual void OnEnable(ECSManager ecs) { }
         public virtual void Start(ECSManager ecs) { }
+        public virtual void BeforeStart(ECSManager ecs) { }
         public virtual void OnDisable(ECSManager ecs) { }
         public virtual void OnDestroy(ECSManager ecs) { }
         public virtual void Update(ECSManager ecs)

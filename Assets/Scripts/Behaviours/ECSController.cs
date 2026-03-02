@@ -43,6 +43,8 @@ namespace MiniECS
         {
 
             GameLoopController.Instance.Init(_entityBufferSize, _componentBufferSize);
+            
+            _gameMode?.BeforeStart(GameLoopController.Instance.ecsManager);
 
             for (int i = 0; i < _entities.Length; i++)
             {

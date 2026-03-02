@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 namespace MiniECS
 {
+    public delegate void EntityJoined(ECSManager ecs, EntityPrototypeController entityController);
+
     public sealed class ECSManager
     {
 
@@ -15,6 +17,7 @@ namespace MiniECS
 
         private static readonly MultiPool<EntityPrototypeController> _Pool = new();
 
+
         static ECSManager()
         {
             SceneManager.activeSceneChanged += (_, _) =>
@@ -23,6 +26,7 @@ namespace MiniECS
             };
         }
 
+        public event EntityJoined OnEnemyJoins;
         public readonly EntityManager EntityManager;
         public readonly SystemsManager SystemsManager;
         public readonly EventBus EventBus;
@@ -73,6 +77,8 @@ namespace MiniECS
 #if UNITY_EDITOR
             entityController.name = $"{entityController.name} - {entity}";
 #endif
+
+            OnEnemyJoins.Invoke(this, entityController);
         }
 
         // public void RemoveComponent<TComponent>(in Entity entity)

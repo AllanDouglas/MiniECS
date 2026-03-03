@@ -78,7 +78,7 @@ namespace MiniECS
             entityController.name = $"{entityController.name} - {entity}";
 #endif
 
-            OnEnemyJoins.Invoke(this, entityController);
+            OnEnemyJoins?.Invoke(this, entityController);
         }
 
         // public void RemoveComponent<TComponent>(in Entity entity)

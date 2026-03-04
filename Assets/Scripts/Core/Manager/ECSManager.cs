@@ -87,7 +87,9 @@ namespace MiniECS
         //     ComponentID componentId = ComponentsManager.RemoveComponent<TComponent>(in entity);
         //     ArchetypeManager.Set(entity, ArchetypeManager.GetId(in entity) - componentId);
         // }
-        public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab, Action<EntityPrototypeController> onCreate = null)
+        public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab,
+            Action<EntityPrototypeController> onCreate = null,
+            Action<EntityPrototypeController> onActivate = null)
         {
             EntityPrototypeController instance = _Pool.Get(prefab);
             if (instance.Entity == Entity.Null)
@@ -98,45 +100,21 @@ namespace MiniECS
             else
             {
                 EntityManager.Active(instance.Entity);
+                onActivate?.Invoke(instance);
             }
             return instance;
         }
 
         public EntityBehaviour GetPooledEntityInstance(EntityBehaviour prefab, Action<EntityPrototypeController> onCreate = null)
         {
-            EntityPrototypeController instance = _Pool.Get(prefab.EntityController);
-            if (instance.Entity == Entity.Null)
-            {
-                AddEntityController(instance);
-                onCreate?.Invoke(instance);
-            }
-            else
-            {
-                EntityManager.Active(instance.Entity);
-            }
-
-            return instance.GetComponent<EntityBehaviour>();
+            return GetPooledEntityInstance(prefab.EntityController, onCreate).GetComponent<EntityBehaviour>();
         }
 
         public T GetPooledEntityInstance<T>(T prefab)
-            where T : EntityBehaviour
-        {
-            EntityPrototypeController instance = _Pool.Get(prefab.EntityController);
-            if (instance.Entity == Entity.Null)
-            {
-                AddEntityController(instance);
-            }
-            else
-            {
-                EntityManager.Active(instance.Entity);
-            }
-
-            return instance.GetComponent<T>();
-        }
+            where T : EntityBehaviour => GetPooledEntityInstance(prefab.EntityController, onCreate: null, null).GetComponent<T>();
 
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab,
-            Transform parent, Action<EntityPrototypeController> onCreate = null
-            )
+            Transform parent, Action<EntityPrototypeController> onCreate = null)
         {
             EntityPrototypeController instance = GetPooledEntityInstance(prefab, onCreate);
             instance.transform.SetParent(parent);

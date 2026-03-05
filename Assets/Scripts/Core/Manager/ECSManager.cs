@@ -110,8 +110,13 @@ namespace MiniECS
             return GetPooledEntityInstance(prefab.EntityController, onCreate).GetComponent<EntityBehaviour>();
         }
 
-        public T GetPooledEntityInstance<T>(T prefab)
-            where T : EntityBehaviour => GetPooledEntityInstance(prefab.EntityController, onCreate: null, null).GetComponent<T>();
+        public T GetPooledEntityInstance<T>(T prefab, Action<T> onCreate = null, Action<T> onActive = null)
+            where T : EntityBehaviour
+        {
+            return GetPooledEntityInstance(prefab.EntityController,
+                p => onCreate?.Invoke(p.GetComponent<T>()),
+                p => onActive?.Invoke(p.GetComponent<T>())).GetComponent<T>();
+        }
 
         public EntityPrototypeController GetPooledEntityInstance(EntityPrototypeController prefab,
             Transform parent, Action<EntityPrototypeController> onCreate = null)

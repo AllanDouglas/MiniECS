@@ -132,38 +132,29 @@ public sealed class MovementSystem : UpdateSystem<Position, Velocity>
 
 ### 4. Game Mode
 
-`IGameMode` owns the main lifecycle. This is usually where you create systems and run them every frame.
+`IGameMode` owns the main lifecycle, but in practice you will usually want to inherit from `DefaultGameMode`.
+
+`DefaultGameMode` already implements the runtime loop using `SystemsManager`:
+
+- systems registered in `ecs.SystemsManager` run during `Update`
+- systems registered with `runAtFixedUpdate = true` run during `FixedUpdate`
+- queued events and messages are flushed during `LateUpdate`
+
+That means you typically register your systems once and let `DefaultGameMode` drive them for you, instead of calling each system manually every frame.
 
 ```csharp
 using MiniECS;
-using UnityEngine;
 
-public sealed class ExampleGameMode : IGameMode
+public sealed class ExampleGameMode : DefaultGameMode
 {
-    private MovementSystem _movementSystem;
-
-    public void BeforeStart(ECSManager ecs) { }
-
     public void Start(ECSManager ecs)
     {
-        _movementSystem = new MovementSystem(ecs);
+        ecs.SystemsManager.Register(new MovementSystem(ecs));
     }
-
-    public void OnEnable(ECSManager ecs) { }
-    public void OnDisable(ECSManager ecs) { }
-    public void OnDestroy(ECSManager ecs) { }
-
-    public void Update(ECSManager ecs)
-    {
-        _movementSystem?.Update(new FrameTime(Time.deltaTime, Time.time));
-    }
-
-    public void FixedUpdate(ECSManager ecs) { }
-    public void LateUpdate(ECSManager ecs) { }
 }
 ```
 
-Important note: the previous `README` used an outdated `UpdateSystem.Update` signature. The current API expects a `FrameTime`.
+If you need custom lifecycle behavior, you can still implement `IGameMode` directly. The previous `README` used an outdated example that called systems manually through an older `UpdateSystem.Update` pattern; the current API uses `FrameTime`, and `DefaultGameMode` already handles that internally.
 
 ## Minimal Usage Flow
 

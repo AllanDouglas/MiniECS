@@ -1,91 +1,243 @@
 # MiniECS
 
-MiniECS is a lightweight Entity Component System (ECS) framework designed for Unity projects. It aims to provide a simple, efficient, and flexible architecture for managing ECSManager entities and their behaviors.
+MiniECS is a lightweight ECS framework for Unity, built for projects that want a clear separation between data, behavior, and game flow without adopting a heavier stack. The project combines:
 
-## Features
+- simple entities and components
+- archetype-based system queries
+- integration with GameObjects and the Unity Inspector
+- component prototypes for editor-driven authoring
+- global events and targeted messages
 
-- Minimal and easy-to-understand ECS implementation
-- Decouples data (components) from logic (systems)
-- Seamless integration with Unity workflows
+The goal is not to compete with DOTS/Entities, but to provide a smaller, more direct, and Unity-friendly foundation for games and prototypes.
 
-## Getting Started
+## Overview
 
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/AllanDouglas/MiniECS
-    ```
+The main runtime flow revolves around these types:
 
-2. **Import into Unity:**
-    - Copy the `MiniECS` folder into your Unity project's `Assets` directory.
+- `ECSManager`: coordinates entities, archetypes, systems, `EventBus`, and `MessageBus`
+- `EntityPrototypeController`: represents an entity in the scene and stores its component prototypes
+- `IComponent`: describes pure data
+- `UpdateSystem<...>`: processes entities that contain one or more components
+- `IGameMode`: defines the main gameplay lifecycle (`BeforeStart`, `Start`, `Update`, `FixedUpdate`, `LateUpdate`, and more)
+- `ECSController`: Unity component responsible for bootstrapping the runtime and connecting an `IGameMode`
 
-3. **Usage Example:**
-    ```csharp
-    // Define a component
-    [Serializable, GeneratePrototype(targetNamespace: "Game")]
-    public struct Position : IComponent
+In practice, you define components, register entities through `EntityPrototypeController`, create systems inside an `IGameMode`, and run those systems during Unity's game loop.
+
+## Current Features
+
+- Entity queries by component combination through archetypes
+- Generic update systems with support for up to 5 component types
+- Inspector-driven components using `SerializeReference`
+- Prototype generation through the `GeneratePrototype` attribute
+- Entity pooling and recycling through `ECSManager`
+- ECS events (`IEvent`) and targeted `GameObject` messages (`IMessage`)
+- Extension methods for activating/deactivating entities and safely accessing components
+- Editor tests covering important archetype and component set behavior
+
+## Requirements
+
+- Unity `6000.2.7f2` or compatible
+- `com.unity.test-framework` to run editor tests
+
+This repository is already structured as a complete Unity project. If your goal is to study or extend the framework, you can open the repository root directly in Unity Hub.
+
+## Opening the Project
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/AllanDouglas/MiniECS
+```
+
+2. Open the cloned folder in Unity Hub.
+3. Wait for scripts, analyzers, and assets to finish importing.
+4. Open [`Assets/Tests/Main.unity`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Tests/Main.unity) to explore the current test scene.
+
+## Core Concepts
+
+### 1. Components
+
+A component is pure data and implements `IComponent`.
+
+```csharp
+using System;
+using MiniECS;
+
+[Serializable]
+public struct Position : IComponent
+{
+    public float x;
+    public float y;
+    public float z;
+}
+
+[Serializable]
+public struct Velocity : IComponent
+{
+    public float x;
+    public float y;
+    public float z;
+}
+```
+
+### 2. Prototypes for the Inspector
+
+To add components through the editor on an `EntityPrototypeController`, create a prototype type based on `ComponentPrototype<T>`.
+
+```csharp
+using System;
+using MiniECS;
+
+[Serializable]
+public sealed class VelocityPrototype : ComponentPrototype<Velocity> { }
+```
+
+If you want to automate this, the project also supports prototype generation through `GeneratePrototype`.
+
+```csharp
+using System;
+using MiniECS;
+
+[Serializable, GeneratePrototype("Game")]
+public struct Health : IComponent
+{
+    public int current;
+    public int max;
+}
+
+public sealed partial class HealthPrototype { }
+```
+
+The source generator lives in [`Source Generators/Generator.cs`](/Volumes/Mac/workspaces/unity/MiniECS/Source%20Generators/Generator.cs), and the generated analyzer assembly is included through [`Assets/Analyzers/MiniECSSourceGenerators.dll`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Analyzers/MiniECSSourceGenerators.dll).
+
+### 3. Systems
+
+Systems inherit from `UpdateSystem` and receive `ECSManager` through the constructor. Each `UpdateSystem<T...>` variation iterates over entities that contain the requested components.
+
+```csharp
+using MiniECS;
+
+public sealed class MovementSystem : UpdateSystem<Position, Velocity>
+{
+    public MovementSystem(ECSManager ecsManager) : base(ecsManager) { }
+
+    protected override void OnUpdate(FrameContext context, ref Position position, ref Velocity velocity)
     {
-        public float x, y, z;
+        position.x += velocity.x * context.DeltaTime;
+        position.y += velocity.y * context.DeltaTime;
+        position.z += velocity.z * context.DeltaTime;
+    }
+}
+```
+
+### 4. Game Mode
+
+`IGameMode` owns the main lifecycle. This is usually where you create systems and run them every frame.
+
+```csharp
+using MiniECS;
+using UnityEngine;
+
+public sealed class ExampleGameMode : IGameMode
+{
+    private MovementSystem _movementSystem;
+
+    public void BeforeStart(ECSManager ecs) { }
+
+    public void Start(ECSManager ecs)
+    {
+        _movementSystem = new MovementSystem(ecs);
     }
 
-    // optional: Define a Component Prototype to be able to add a this component on editor
-    public sealed partial class PositionPrototype { }
-    
-    [Serializable]
-    public struct Velocity : IComponent
-    {
-        public float x, y, z;
-    }
-    [Serializable]
-    public sealed class VelocityPrototype : ComponentPrototype<Velocity> { }
+    public void OnEnable(ECSManager ecs) { }
+    public void OnDisable(ECSManager ecs) { }
+    public void OnDestroy(ECSManager ecs) { }
 
-    // Define a system using UpdateSystem
-    public class MovementSystem : UpdateSystem<Position, Velocity>
+    public void Update(ECSManager ecs)
     {
-        public MovementSystem(ECSManager ECSManager) : base(ECSManager) { }
-
-        protected override void OnUpdate(FilterContext context, ref Position pos, ref Velocity vel)
-        {
-            pos.x += vel.x * context.DeltaTime;
-            pos.y += vel.y * context.DeltaTime;
-            pos.z += vel.z * context.DeltaTime;
-        }
+        _movementSystem?.Update(new FrameTime(Time.deltaTime, Time.time));
     }
 
-    // Example ECSManagerMode using MovementSystem
-    public class ExampleGameMode : IGameMode
-    {
-        private MovementSystem movementSystem;
+    public void FixedUpdate(ECSManager ecs) { }
+    public void LateUpdate(ECSManager ecs) { }
+}
+```
 
-        public void OnEnable(ECSManager ecsManager)
-        {
-            movementSystem = new MovementSystem(ecsManager);
-        }
+Important note: the previous `README` used an outdated `UpdateSystem.Update` signature. The current API expects a `FrameTime`.
 
-        public void OnDisable(ECSManager ecsManager) { }
-        public void Start(ECSManager ecsManager) { }
+## Minimal Usage Flow
 
-        public void Update(ECSManager ecsManager)
-        {
-            movementSystem.Update(ecsManager, Time.deltaTime);
-        }
+1. Create a `GameObject` with `ECSController`.
+2. In `ECSController`, assign an `IGameMode` to `_gameMode`.
+3. Create one or more `GameObjects` with `EntityPrototypeController`.
+4. Add the required `IComponentPrototype` instances to each entity.
+5. Enter play mode. `ECSController` initializes `ECSManager`, registers discovered entities, and forwards the Unity loop to your `IGameMode`.
 
-        public void FixedUpdate(ECSManager ecsManager) { }
-        public void LateUpdate(ECSManager ecsManager) { }
-    }
-    //TODO : Work in progress
-    ```
-4. Create a EntityController
-    - Add the EntityController to a GameObject:
+During initialization, `ECSController` also uses `FindObjectsByType<EntityPrototypeController>()`, so scene entities can be registered automatically.
 
-    - In the Unity Editor, create an empty GameObject.
-    Attach the EntityController script to this GameObject.
-    Assign Component Prototypes:
+## Accessing Components at Runtime
 
-    - In the Inspector, you’ll see a list where you can add component prototypes (like PositionPrototype, VelocityPrototype).
-    Add and configure these prototypes as needed.
-    Access and Modify Components in Code:
+`ECSManager` exposes extension methods for retrieving components from an entity:
 
-    - You can get a reference to the EntityController and use its API to add, remove, or query components at runtime.
+```csharp
+ref var position = ref ecs.GetComponent<Position>(entity);
+ref var velocity = ref ecs.TryGetComponent<Velocity>(entity, out bool hasVelocity);
+```
+
+Inside an `EntityPrototypeController`, you can also query the associated ECS components:
+
+```csharp
+if (entityController.HasComponent<Health>())
+{
+    ref var health = ref entityController.TryGetECSComponent<Health>(out bool hasHealth);
+}
+```
+
+## Events and Messages
+
+The project includes two communication mechanisms:
+
+- `EventBus`: global ECS events based on `IEvent`, queued and flushed during `LateUpdate`
+- `MessageBus`: targeted messages sent to a specific `GameObject`, based on `IMessage`
+
+Use `EventBus` when communication is global and decoupled. Use `MessageBus` when there is a specific target in the scene.
+
+## Pooling and Recycling
+
+`ECSManager` provides helpers for reusing entities through a pool:
+
+- `GetPooledEntityInstance(...)`
+- `Recycle(entity)`
+
+This is useful for bullets, enemies, pickups, or any short-lived object that still needs to remain integrated with the ECS runtime.
+
+## Project Structure
+
+- [`Assets/Scripts/Core`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Scripts/Core): entities, components, archetypes, systems, events, and messages
+- [`Assets/Scripts/Behaviours`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Scripts/Behaviours): bridge layer between ECS and GameObjects/MonoBehaviours
+- [`Assets/Editor`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Editor): custom drawers and editor tests
+- [`Source Generators`](/Volumes/Mac/workspaces/unity/MiniECS/Source%20Generators): prototype generation
+
+## Tests
+
+The current tests live in [`Assets/Editor/Tests/ArchetypeTests.cs`](/Volumes/Mac/workspaces/unity/MiniECS/Assets/Editor/Tests/ArchetypeTests.cs) and mainly cover:
+
+- `ComponentSet` composition
+- component lookup behavior
+- adding and removing entities from an `Archetype`
+
+Run them through the Unity Test Runner in Edit Mode.
+
+## Current State and Limitations
+
+The project already has a functional core, but it still looks like an evolving framework. A few things are worth knowing before adopting or expanding it:
+
+- the documentation had fallen behind the current API
+- the main workflow is intentionally centered around GameObjects and Inspector tooling
+- test coverage is still concentrated on the archetype core
+
+If the long-term goal is to turn MiniECS into a reusable library, the next natural step would be to strengthen examples, integration tests, and package-oriented distribution docs.
+
 ## License
 
 This project is licensed under the MIT License.

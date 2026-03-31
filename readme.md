@@ -219,16 +219,6 @@ The current tests live in [`Assets/Editor/Tests/ArchetypeTests.cs`](/Volumes/Mac
 
 Run them through the Unity Test Runner in Edit Mode.
 
-## Current State and Limitations
-
-The project already has a functional core, but it still looks like an evolving framework. A few things are worth knowing before adopting or expanding it:
-
-- the documentation had fallen behind the current API
-- the main workflow is intentionally centered around GameObjects and Inspector tooling
-- test coverage is still concentrated on the archetype core
-
-If the long-term goal is to turn MiniECS into a reusable library, the next natural step would be to strengthen examples, integration tests, and package-oriented distribution docs.
-
 ## License
 
 This project is licensed under the MIT License.

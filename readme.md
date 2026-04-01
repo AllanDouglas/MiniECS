@@ -191,6 +191,29 @@ The project includes two communication mechanisms:
 - `EventBus`: global ECS events based on `IEvent`, queued and flushed during `LateUpdate`
 - `MessageBus`: targeted messages sent to a specific `GameObject`, based on `IMessage`
 
+To consume `EventBus` events, inherit from `EventHandler<TEvent>` (or its multi-event variants) and register the handler in your game mode or setup code.
+
+```csharp
+using MiniECS;
+
+public struct DamageEvent : IEvent
+{
+    public int Value;
+}
+
+public sealed class DamageEventHandler : EventHandler<DamageEvent>
+{
+    public override void Handler(ECSManager ecs, DamageEvent evt)
+    {
+        // React to a global ECS event.
+    }
+}
+
+// Registration example
+var handler = new DamageEventHandler();
+handler.Subscribe(ecs);
+```
+
 Use `EventBus` when communication is global and decoupled. Use `MessageBus` when there is a specific target in the scene.
 
 ## Pooling and Recycling

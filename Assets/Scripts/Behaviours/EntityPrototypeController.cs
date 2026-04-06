@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Scripting.APIUpdating;
 using System;
+using UnityEngine.Events;
 
 namespace MiniECS
 {
@@ -17,6 +18,7 @@ namespace MiniECS
 #endif
     {
         [SerializeReference, ReferencePicker] private IComponentPrototype[] _components;
+        [SerializeField] UnityEvent _onJoined = new();
         [SerializeField, ReadOnly] private EntityPrototypeController[] _children;
 
         private ECSManager _ecsManager;
@@ -32,6 +34,7 @@ namespace MiniECS
                 {
                     _ecsManager = value;
                     OnJoined?.Invoke(_ecsManager, this, Entity);
+                    _onJoined.Invoke();
                 }
             }
         }
@@ -166,7 +169,7 @@ namespace MiniECS
             {
                 SerializationUtility.ClearAllManagedReferencesWithMissingTypes(this);
             }
-            
+
             if (!Application.isPlaying)
             {
                 if (Components != null)

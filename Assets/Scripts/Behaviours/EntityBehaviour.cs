@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace MiniECS
 {
+    public delegate void FinComponentAction<TComponent, TTarget>(ref TComponent component, TTarget target)
+        where TComponent : struct, IComponent
+        where TTarget : class;
+
     [RequireComponent(typeof(EntityPrototypeController))]
     [DefaultExecutionOrder(-51)]
     public abstract class EntityBehaviour : MiniECSBehaviour
@@ -22,6 +26,21 @@ namespace MiniECS
 
         public ref TComponent TryGetECSComponent<TComponent>(out bool component)
             where TComponent : struct, IComponent => ref EntityController.TryGetECSComponent<TComponent>(out component);
+
+        public ref TComponent TryGetECSComponent<TComponent, TTarget>(TTarget target, out bool hasComponent, FinComponentAction<TComponent, TTarget> onHasComponent)
+            where TComponent : struct, IComponent
+            where TTarget : class
+        {
+            ref var component = ref EntityController.TryGetECSComponent<TComponent>(out hasComponent);
+
+            if (hasComponent)
+            {
+                onHasComponent?.Invoke(ref component, target);
+            }
+
+            return ref component;
+        }
+
 #if UNITY_EDITOR
         protected virtual void OnValidate()
         {

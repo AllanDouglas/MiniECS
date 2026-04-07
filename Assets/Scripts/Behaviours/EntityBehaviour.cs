@@ -3,9 +3,15 @@ using UnityEngine;
 
 namespace MiniECS
 {
+    public delegate void FinComponentAction<TComponent>(ref TComponent component)
+        where TComponent : struct, IComponent;
     public delegate void FinComponentAction<TComponent, TTarget>(ref TComponent component, TTarget target)
         where TComponent : struct, IComponent
         where TTarget : class;
+    public delegate void FinComponentAction<TComponent, TTarget, TTarget1>(ref TComponent component, TTarget target, TTarget1 target0)
+        where TComponent : struct, IComponent
+        where TTarget : class
+        where TTarget1 : class;
 
     [RequireComponent(typeof(EntityPrototypeController))]
     [DefaultExecutionOrder(-51)]
@@ -39,6 +45,67 @@ namespace MiniECS
             }
 
             return ref component;
+        }
+
+        public ref TComponent TryGetECSComponent<TComponent, TTarget, TTarget1>(
+            TTarget target,
+            TTarget1 target1,
+            out bool hasComponent,
+            FinComponentAction<TComponent, TTarget, TTarget1> onHasComponent) where TComponent : struct, IComponent
+                                                                              where TTarget : class
+                                                                              where TTarget1 : class
+
+        {
+            ref var component = ref EntityController.TryGetECSComponent<TComponent>(out hasComponent);
+
+            if (hasComponent)
+            {
+                onHasComponent?.Invoke(ref component, target, target1);
+            }
+
+            return ref component;
+        }
+
+        public void ExecuteWith<TComponent>(
+
+            FinComponentAction<TComponent> onHasComponent) where TComponent : struct, IComponent
+
+        {
+            ref var component = ref EntityController.TryGetECSComponent<TComponent>(out bool hasComponent);
+
+            if (hasComponent)
+            {
+                onHasComponent?.Invoke(ref component);
+            }
+        }
+
+        public void ExecuteWith<TComponent, TTarget>(
+            TTarget target,
+            FinComponentAction<TComponent, TTarget> onHasComponent) where TComponent : struct, IComponent
+                                                                              where TTarget : class
+        {
+            ref var component = ref EntityController.TryGetECSComponent<TComponent>(out bool hasComponent);
+
+            if (hasComponent)
+            {
+                onHasComponent?.Invoke(ref component, target);
+            }
+        }
+
+        public void ExecuteWith<TComponent, TTarget, TTarget1>(
+            TTarget target,
+            TTarget1 target1,
+            FinComponentAction<TComponent, TTarget, TTarget1> onHasComponent) where TComponent : struct, IComponent
+                                                                              where TTarget : class
+                                                                              where TTarget1 : class
+
+        {
+            ref var component = ref EntityController.TryGetECSComponent<TComponent>(out bool hasComponent);
+
+            if (hasComponent)
+            {
+                onHasComponent?.Invoke(ref component, target, target1);
+            }
         }
 
 #if UNITY_EDITOR

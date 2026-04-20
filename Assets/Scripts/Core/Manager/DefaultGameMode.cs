@@ -38,7 +38,7 @@ namespace MiniECS
         public virtual void LateUpdate(ECSManager ecs)
         {
             ecs.EventBus.FlushAll(ecs);
-            ecs.MessageBus.FlushAll();
+            ecs.MessageBus.FlushAll(ecs);
         }
     }
 }

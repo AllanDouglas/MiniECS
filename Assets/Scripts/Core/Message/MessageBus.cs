@@ -12,19 +12,19 @@ namespace MiniECS
     {
         private interface IFlushable
         {
-            void Flush();
+            void Flush(ECSManager manager);
             void Clear();
         }
 
         private static readonly List<IFlushable> _flushers = new();
 
-        public void Subscribe<TMessage>(GameObject listener, Action<TMessage> action)
+        public void Subscribe<TMessage>(GameObject listener, Action<TMessage, ECSManager> action)
             where TMessage : struct, IMessage
         {
             MessageStorage<TMessage>.Instance.Subscribe(listener, action);
         }
 
-        public void Unsubscribe<T>(GameObject listener, Action<T> action)
+        public void Unsubscribe<T>(GameObject listener, Action<T, ECSManager> action)
             where T : struct, IMessage
         {
             MessageStorage<T>.Instance.Unsubscribe(listener, action);
@@ -35,14 +35,14 @@ namespace MiniECS
         {
             MessageStorage<T>.Instance.Enqueue(target, message);
         }
-        public void Subscribe<T>(MiniECSBehaviour listener, Action<T> action)
+        public void Subscribe<T>(MiniECSBehaviour listener, Action<T, ECSManager> action)
             where T : struct, IMessage
         {
             if (listener != null)
                 MessageStorage<T>.Instance.Subscribe(listener.gameObject, action);
         }
 
-        public void Unsubscribe<T>(MiniECSBehaviour listener, Action<T> action)
+        public void Unsubscribe<T>(MiniECSBehaviour listener, Action<T, ECSManager> action)
             where T : struct, IMessage
         {
             if (listener != null)
@@ -63,14 +63,14 @@ namespace MiniECS
                 MessageStorage<T>.Instance.Enqueue(target.gameObject, default);
         }
 
-        public void Subscribe<T>(MonoBehaviour listener, Action<T> action)
+        public void Subscribe<T>(MonoBehaviour listener, Action<T, ECSManager> action)
             where T : struct, IMessage
         {
             if (listener != null)
                 MessageStorage<T>.Instance.Subscribe(listener.gameObject, action);
         }
 
-        public void Unsubscribe<T>(MonoBehaviour listener, Action<T> action)
+        public void Unsubscribe<T>(MonoBehaviour listener, Action<T, ECSManager> action)
             where T : struct, IMessage
         {
             if (listener != null)
@@ -84,14 +84,14 @@ namespace MiniECS
                 MessageStorage<T>.Instance.Enqueue(target.gameObject, message);
         }
 
-        public void Flush<T>() where T : struct, IMessage
-            => MessageStorage<T>.Instance.Flush();
+        public void Flush<T>(ECSManager ecs) where T : struct, IMessage
+            => MessageStorage<T>.Instance.Flush(ecs);
 
-        public void FlushAll()
+        public void FlushAll(ECSManager ecs)
         {
             for (int i = 0; i < _flushers.Count; i++)
             {
-                _flushers[i].Flush();
+                _flushers[i].Flush(ecs);
             }
         }
 
@@ -127,11 +127,11 @@ namespace MiniECS
                 }
             }
 
-            // private readonly Dictionary<GameObject, List<Action<TMessage>>> _listeners = new();
+            // private readonly Dictionary<GameObject, List<Action<TMessage, ECSManager>>> _listeners = new();
             private readonly Dictionary<GameObject, ActionBuffer<TMessage>> _listeners = new();
             private readonly Queue<(GameObject target, TMessage message)> _messageQueue = new();
 
-            public void Flush()
+            public void Flush(ECSManager ecs)
             {
 #if UNITY_EDITOR
                 if (Thread.CurrentThread.ManagedThreadId != MiniECSBehaviour.MainThreadIndex)
@@ -143,7 +143,7 @@ namespace MiniECS
                 while (_messageQueue.Count > 0)
                 {
                     var (target, message) = _messageQueue.Dequeue();
-                    Dispatch(target, message);
+                    Dispatch(target, message, ecs);
                 }
             }
 
@@ -152,7 +152,7 @@ namespace MiniECS
                 _messageQueue.Enqueue((target, message));
             }
 
-            public void Subscribe(GameObject listener, Action<TMessage> action)
+            public void Subscribe(GameObject listener, Action<TMessage, ECSManager> action)
             {
                 if (_listeners.TryGetValue(listener, out var actions))
                 {
@@ -166,7 +166,7 @@ namespace MiniECS
                 _listeners.Add(listener, buffer);
             }
 
-            public void Unsubscribe(GameObject listener, Action<TMessage> action)
+            public void Unsubscribe(GameObject listener, Action<TMessage, ECSManager> action)
             {
                 if (_listeners.TryGetValue(listener, out var actions))
                 {
@@ -180,7 +180,7 @@ namespace MiniECS
 
                 }
 
-                static bool LocalUnsubscribe(Action<TMessage> action, ActionBuffer<TMessage> actions)
+                static bool LocalUnsubscribe(Action<TMessage, ECSManager> action, ActionBuffer<TMessage> actions)
                 {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
@@ -196,13 +196,13 @@ namespace MiniECS
                 }
             }
 
-            private void Dispatch(GameObject target, TMessage message)
+            private void Dispatch(GameObject target, TMessage message, ECSManager ecs)
             {
                 if (_listeners.TryGetValue(target, out var actions))
                 {
                     if (actions.dispatching)
                     {
-                        actions.lazyActions += () => LocalDispatch(in message, actions);
+                        actions.lazyActions += () => LocalDispatch(in message, actions, ecs);
                         return;
                     }
 
@@ -213,7 +213,7 @@ namespace MiniECS
 
                     actions.dispatching = true;
 
-                    LocalDispatch(in message, actions);
+                    LocalDispatch(in message, actions, ecs);
 
                     actions.dispatching = false;
 
@@ -221,7 +221,7 @@ namespace MiniECS
                     actions.lazyActions = null;
                 }
 
-                static void LocalDispatch(in TMessage message, ActionBuffer<TMessage> actions)
+                static void LocalDispatch(in TMessage message, ActionBuffer<TMessage> actions, ECSManager ecs)
                 {
                     for (int i = actions.Count - 1; i >= 0; i--)
                     {
@@ -230,7 +230,7 @@ namespace MiniECS
                             return;
                         }
 
-                        actions[i].Invoke(message);
+                        actions[i].Invoke(message, ecs);
                     }
 
                     return;
@@ -245,12 +245,12 @@ namespace MiniECS
 
             private class ActionBuffer<M> where M : struct, IMessage
             {
-                public List<Action<M>> Actions;
+                public List<Action<M, ECSManager>> Actions;
                 public bool dispatching;
                 public Action lazyActions;
                 public int Count => Actions?.Count ?? 0;
 
-                public Action<M> this[int index]
+                public Action<M, ECSManager> this[int index]
                 {
                     get => Actions[index];
                     set => Actions[index] = value;
@@ -258,9 +258,9 @@ namespace MiniECS
 
                 public void RemoveAt(int index) => Actions.RemoveAt(index);
 
-                internal void Add(Action<M> action)
+                internal void Add(Action<M, ECSManager> action)
                 {
-                    Actions ??= new List<Action<M>>();
+                    Actions ??= new List<Action<M, ECSManager>>();
 
                     Actions.Add(action);
                 }

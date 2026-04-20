@@ -27,7 +27,7 @@ namespace MiniECS
             bus.Unsubscribe<TMessage>(gameObject, Action);
         }
 
-        public void Action(TMessage message) => _onPerform.Invoke(message);
+        public void Action(TMessage message, ECSManager ecs) => _onPerform.Invoke(message);
 
 #if UNITY_EDITOR
         public void Dispatch()

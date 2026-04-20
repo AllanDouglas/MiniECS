@@ -143,7 +143,7 @@ namespace MiniECS
             {
                 GameMode.LateUpdate(ecsManager);
                 EventBus.FlushAll(ecsManager);
-                MessageBus.FlushAll();
+                MessageBus.FlushAll(ecsManager);
             }
         }
     }

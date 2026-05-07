@@ -160,5 +160,8 @@ namespace MiniECS
         }
 
         public EntityPrototypeController GetEntityController(Entity entity) => EntityManager.GetEntityController(in entity);
+
+        public TComponent GetEntityController<TComponent>(Entity entity) where TComponent : Component
+            => EntityManager.GetEntityController(in entity).GetComponent<TComponent>();
     }
 }
